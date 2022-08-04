@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword />
+    <_PublishTargetUrl>ftp://win8040.site4now.net:21/p2ptable</_PublishTargetUrl>
+    <History>True|2022-07-31T21:44:34.4834332Z;False|2022-08-01T00:42:57.2014012+03:00;True|2022-07-29T04:02:59.2154538+03:00;False|2022-07-29T04:01:11.1139604+03:00;True|2022-07-29T03:42:27.1987598+03:00;False|2022-07-29T03:41:20.3819780+03:00;True|2022-07-29T03:29:20.2782015+03:00;False|2022-07-29T03:21:22.0549321+03:00;True|2022-07-29T03:11:52.0600144+03:00;True|2022-07-28T18:51:32.7188859+03:00;False|2022-07-28T18:49:57.5831733+03:00;</History>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="appsettings.Development.json">
+      <publishTime>07/25/2022 21:06:56</publishTime>
+    </File>
+    <File Include="appsettings.json">
+      <publishTime>07/25/2022 21:06:56</publishTime>
+    </File>
+    <File Include="CryptoParser.deps.json">
+      <publishTime>08/01/2022 00:43:58</publishTime>
+    </File>
+    <File Include="CryptoParser.dll">
+      <publishTime>08/01/2022 00:43:58</publishTime>
+    </File>
+    <File Include="CryptoParser.exe">
+      <publishTime>08/01/2022 00:43:58</publishTime>
+    </File>
+    <File Include="CryptoParser.pdb">
+      <publishTime>08/01/2022 00:43:58</publishTime>
+    </File>
+    <File Include="CryptoParser.runtimeconfig.json">
+      <publishTime>07/29/2022 03:28:44</publishTime>
+    </File>
+    <File Include="Google.Apis.Auth.dll">
+      <publishTime>03/28/2022 11:01:32</publishTime>
+    </File>
+    <File Include="Google.Apis.Auth.PlatformServices.dll">
+      <publishTime>03/28/2022 11:01:32</publishTime>
+    </File>
+    <File Include="Google.Apis.Core.dll">
+      <publishTime>03/28/2022 11:01:26</publishTime>
+    </File>
+    <File Include="Google.Apis.dll">
+      <publishTime>03/28/2022 11:01:26</publishTime>
+    </File>
+    <File Include="Google.Apis.Sheets.v4.dll">
+      <publishTime>06/30/2022 11:21:54</publishTime>
+    </File>
+    <File Include="log4net.config">
+      <publishTime>07/28/2022 22:55:29</publishTime>
+    </File>
+    <File Include="log4net.dll">
+      <publishTime>12/17/2021 13:45:06</publishTime>
+    </File>
+    <File Include="Microsoft.OpenApi.dll">
+      <publishTime>08/29/2020 23:14:12</publishTime>
+    </File>
+    <File Include="Newtonsoft.Json.dll">
+      <publishTime>03/17/2021 23:03:36</publishTime>
+    </File>
+    <File Include="nikoncryptoprototype-92a9ba4e6df8.json">
+      <publishTime>07/29/2022 00:51:09</publishTime>
+    </File>
+    <File Include="runtimes/win/lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll">
+      <publishTime>05/15/2018 16:29:44</publishTime>
+    </File>
+    <File Include="Swashbuckle.AspNetCore.Swagger.dll">
+      <publishTime>07/19/2022 18:21:22</publishTime>
+    </File>
+    <File Include="Swashbuckle.AspNetCore.SwaggerGen.dll">
+      <publishTime>07/19/2022 18:21:38</publishTime>
+    </File>
+    <File Include="Swashbuckle.AspNetCore.SwaggerUI.dll">
+      <publishTime>07/19/2022 18:21:48</publishTime>
+    </File>
+    <File Include="System.Configuration.ConfigurationManager.dll">
+      <publishTime>05/15/2018 16:29:38</publishTime>
+    </File>
+    <File Include="System.Security.Cryptography.ProtectedData.dll">
+      <publishTime>05/15/2018 16:29:44</publishTime>
+    </File>
+    <File Include="System.Security.Permissions.dll">
+      <publishTime>05/15/2018 16:29:40</publishTime>
+    </File>
+    <File Include="Unity.Abstractions.dll">
+      <publishTime>01/30/2021 00:43:58</publishTime>
+    </File>
+    <File Include="Unity.Container.dll">
+      <publishTime>01/30/2021 00:44:04</publishTime>
+    </File>
+    <File Include="web.config">
+      <publishTime>08/01/2022 00:44:16</publishTime>
+    </File>
+  </ItemGroup>
+</Project>
