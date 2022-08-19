@@ -7,9 +7,9 @@ namespace CryptoParser.Controllers
    public class DefaultController : Controller
    {
       [HttpGet]
-      public float Get()
+      public string Get()
       {
-         return Services.ServicesContainer.Get<Services.ParserManager>().GetNumber();
+         return DateTime.UtcNow.ToString();
       }
 
    }

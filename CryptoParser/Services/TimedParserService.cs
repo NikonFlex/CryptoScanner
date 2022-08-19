@@ -11,7 +11,7 @@
          ServicesContainer.Get<Logger>().Log.Info("Timed Hosted Service running.");
 
          _timer = new Timer(ParseExchanges, null, TimeSpan.Zero,
-             TimeSpan.FromSeconds(15));
+             TimeSpan.FromSeconds(60));
 
          return Task.CompletedTask;
       }
@@ -28,24 +28,26 @@
       private void ParseExchanges(object? state)
       {
          ServicesContainer.Get<Logger>().Log.Info("Start parse exchanges");
-         
-         ParseBinance().ContinueWith(res =>
-            setNumber(res.Result)
-         );
+
+         Models.Binance.ParseCoursesAsync().ContinueWith(res =>
+            ServicesContainer.Get<Models.GoogleSheetFiller>().UpdateSheet()
+            );
       }
 
-      private async Task<float> ParseBinance()
-      {
-         ServicesContainer.Get<Logger>().Log.Info("Start parse binance");
-         return await Models.Parser.ParsePrice();
-      }
+      //private async Task<float> ParseBinance()
+      //{
+      //   //ServicesContainer.Get<Logger>().Log.Info("Start parse binance");
+      //   //ServicesContainer.Get<ParserManager>().AddExchange(new Models.Exchange("Binance"));
+
+      //   //return await Models.Binance.ParseCourses();
+      //}
 
       private void setNumber(float n)
       {
          //ServicesContainer.Get<Logger>().Log.Info("Set Binance Price");
-         ServicesContainer.Get<ParserManager>().SetNumber(n);
-         ServicesContainer.Get<Logger>().Log.Info(n);
-         ServicesContainer.Get<Models.GoogleSheetFiller>().CreateEntry(n);
+         //ServicesContainer.Get<ParserManager>().SetNumber(n);
+         //ServicesContainer.Get<Logger>().Log.Info(n);
+         //ServicesContainer.Get<Models.GoogleSheetFiller>().CreateEntry(n);
       }
 
       public void Dispose()

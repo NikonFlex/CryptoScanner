@@ -18,7 +18,7 @@ namespace CryptoParser.Models
                merchantCheck = false,
                page = 1,
                payTypes = new[] { "Tinkoff" },
-               rows = 50,
+               rows = 1,
                tradeType = "BUY"
             });
 

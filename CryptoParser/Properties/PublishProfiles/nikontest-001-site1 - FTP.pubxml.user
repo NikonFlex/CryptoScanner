@@ -8,29 +8,29 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword />
     <_PublishTargetUrl>ftp://win8040.site4now.net:21/p2ptable</_PublishTargetUrl>
-    <History>True|2022-07-31T21:44:34.4834332Z;False|2022-08-01T00:42:57.2014012+03:00;True|2022-07-29T04:02:59.2154538+03:00;False|2022-07-29T04:01:11.1139604+03:00;True|2022-07-29T03:42:27.1987598+03:00;False|2022-07-29T03:41:20.3819780+03:00;True|2022-07-29T03:29:20.2782015+03:00;False|2022-07-29T03:21:22.0549321+03:00;True|2022-07-29T03:11:52.0600144+03:00;True|2022-07-28T18:51:32.7188859+03:00;False|2022-07-28T18:49:57.5831733+03:00;</History>
+    <History>True|2022-08-19T13:07:31.8089323Z;False|2022-08-19T16:06:43.8316011+03:00;True|2022-08-18T21:14:31.0677844+03:00;False|2022-08-18T21:13:23.1115092+03:00;False|2022-08-18T21:11:48.5354972+03:00;False|2022-08-18T21:11:15.2406853+03:00;True|2022-08-18T21:08:16.7051724+03:00;True|2022-08-18T13:23:34.2081138+03:00;False|2022-08-18T13:23:01.2702885+03:00;False|2022-08-18T13:18:24.1237706+03:00;True|2022-08-18T12:23:06.1767195+03:00;False|2022-08-18T12:22:03.7664566+03:00;True|2022-08-01T00:44:34.4834332+03:00;False|2022-08-01T00:42:57.2014012+03:00;True|2022-07-29T04:02:59.2154538+03:00;False|2022-07-29T04:01:11.1139604+03:00;True|2022-07-29T03:42:27.1987598+03:00;False|2022-07-29T03:41:20.3819780+03:00;True|2022-07-29T03:29:20.2782015+03:00;False|2022-07-29T03:21:22.0549321+03:00;True|2022-07-29T03:11:52.0600144+03:00;True|2022-07-28T18:51:32.7188859+03:00;False|2022-07-28T18:49:57.5831733+03:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="appsettings.Development.json">
-      <publishTime>07/25/2022 21:06:56</publishTime>
+      <publishTime>08/17/2022 21:53:58</publishTime>
     </File>
     <File Include="appsettings.json">
-      <publishTime>07/25/2022 21:06:56</publishTime>
+      <publishTime>08/17/2022 21:53:58</publishTime>
     </File>
     <File Include="CryptoParser.deps.json">
-      <publishTime>08/01/2022 00:43:58</publishTime>
+      <publishTime>08/19/2022 16:06:59</publishTime>
     </File>
     <File Include="CryptoParser.dll">
-      <publishTime>08/01/2022 00:43:58</publishTime>
+      <publishTime>08/19/2022 16:06:59</publishTime>
     </File>
     <File Include="CryptoParser.exe">
-      <publishTime>08/01/2022 00:43:58</publishTime>
+      <publishTime>08/19/2022 16:06:59</publishTime>
     </File>
     <File Include="CryptoParser.pdb">
-      <publishTime>08/01/2022 00:43:58</publishTime>
+      <publishTime>08/19/2022 16:06:59</publishTime>
     </File>
     <File Include="CryptoParser.runtimeconfig.json">
-      <publishTime>07/29/2022 03:28:44</publishTime>
+      <publishTime>08/19/2022 16:06:59</publishTime>
     </File>
     <File Include="Google.Apis.Auth.dll">
       <publishTime>03/28/2022 11:01:32</publishTime>
@@ -48,7 +48,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/30/2022 11:21:54</publishTime>
     </File>
     <File Include="log4net.config">
-      <publishTime>07/28/2022 22:55:29</publishTime>
+      <publishTime>08/17/2022 21:53:58</publishTime>
     </File>
     <File Include="log4net.dll">
       <publishTime>12/17/2021 13:45:06</publishTime>
@@ -60,7 +60,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>03/17/2021 23:03:36</publishTime>
     </File>
     <File Include="nikoncryptoprototype-92a9ba4e6df8.json">
-      <publishTime>07/29/2022 00:51:09</publishTime>
+      <publishTime>08/17/2022 21:53:58</publishTime>
     </File>
     <File Include="runtimes/win/lib/netstandard2.0/System.Security.Cryptography.ProtectedData.dll">
       <publishTime>05/15/2018 16:29:44</publishTime>
@@ -90,7 +90,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/30/2021 00:44:04</publishTime>
     </File>
     <File Include="web.config">
-      <publishTime>08/01/2022 00:44:16</publishTime>
+      <publishTime>08/19/2022 16:07:15</publishTime>
     </File>
   </ItemGroup>
 </Project>
