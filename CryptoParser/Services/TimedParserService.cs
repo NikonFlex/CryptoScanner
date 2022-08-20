@@ -1,4 +1,6 @@
-﻿namespace CryptoParser.Services
+﻿using CryptoParser.Models.ExchangesModels;
+
+namespace CryptoParser.Services
 {
    public class TimedParserService : IHostedService, IDisposable
    {
@@ -29,9 +31,12 @@
       {
          ServicesContainer.Get<Logger>().Log.Info("Start parse exchanges");
 
-         Models.Binance.ParseCoursesAsync().ContinueWith(res =>
+         ServicesContainer.Get<ExchangesData>().UpdateDataAsync().ContinueWith(res =>
             ServicesContainer.Get<Models.GoogleSheetFiller>().UpdateSheet()
             );
+         //Binance.ParseCoursesAsync().ContinueWith(res =>
+         //   ServicesContainer.Get<Models.GoogleSheetFiller>().UpdateSheet()
+         //   );
       }
 
       //private async Task<float> ParseBinance()

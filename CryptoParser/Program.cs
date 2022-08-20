@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-ServicesContainer.Register(new ParserManager());
+ServicesContainer.Register(new CryptoParser.Models.ExchangesModels.ExchangesData());
 ServicesContainer.Register(new Logger());
 ServicesContainer.Register(new GoogleSheetFiller());
 builder.Services.AddHostedService<TimedParserService>();

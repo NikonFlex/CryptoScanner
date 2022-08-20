@@ -1,6 +1,8 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using CryptoParser.Models.ExchangesModels;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
+using CryptoParser.Services;
 
 namespace CryptoParser.Models
 {
@@ -41,27 +43,70 @@ namespace CryptoParser.Models
       public void UpdateSheet()
       {
          updateRatesTable();
+         updateCurrencyTable(ServicesContainer.Get<ExchangesData>().CurrenciesNames[0]);
+      }
+
+      private void updateCurrencyTable(string currencyName)
+      {
+         createCurrencyHeaderRow(currencyName);
+         int rowCounter = 9;
+         foreach (var sellBank in ServicesContainer.Get<ExchangesData>().BanksNames)
+         {
+            createCurrencyTableRow(currencyName, sellBank, rowCounter);
+            rowCounter++;
+         }
+      }
+
+
+
+      private void createCurrencyHeaderRow(string currencyName)
+      {
+         string tableName = currencyName;
+
+         var range = $"{_sheet}!A8:G8";
+         var rowNames = new List<object>() { tableName };
+         foreach (var bank in ServicesContainer.Get<ExchangesData>().BanksNames)
+            rowNames.Add("Покупка" + "\n" + $"{EngToRusDict[$"{bank}"]}");
+         rowNames.Add(DateTime.Now);
+
+         updateRangeValues(rowNames, range);
+      }
+
+      private void createCurrencyTableRow(string currencyName, string sellBank, int rowN)
+      {
+         var range = $"{_sheet}!A{rowN}:F{rowN}";
+         var exchangesData = ServicesContainer.Get<ExchangesData>();
+         var spreads = new List<object>();
+         spreads.Add("Продажа" + "\n" + $"{EngToRusDict[$"{sellBank}"]}");
+         foreach (var buyBank in exchangesData.BanksNames)
+         {
+            var buyOfferPrice = exchangesData.GetOffer("Binance", buyBank, currencyName, TradeType.Buy).Price;
+            var sellOfferPrice = exchangesData.GetOffer("Binance", sellBank, currencyName, TradeType.Sell).Price;
+
+            spreads.Add(100000 / sellOfferPrice * buyOfferPrice - 100000);
+         }  
+         updateRangeValues(spreads, range);
       }
 
       private void updateRatesTable()
       {
-         createHeaderRow();
+         createRatesHeaderRow();
 
          int rowCounter = 2;
-         foreach (var currencyName in Binance.CurrenciesNames)
+         foreach (var currencyName in ServicesContainer.Get<ExchangesData>().CurrenciesNames)
          {
             createCurrencyRow(currencyName, rowCounter);
             rowCounter++;
          }
       }
 
-      private void createHeaderRow()
+      private void createRatesHeaderRow()
       {
          string tableName = "RUB Курсы:";
 
          var range = $"{_sheet}!A1:L1";
          var rowNames = new List<object>() { tableName };
-         foreach (var bank in Binance.BanksNames)
+         foreach (var bank in ServicesContainer.Get<ExchangesData>().BanksNames)
          {
             rowNames.Add("Покупка" + "\n" + $"{EngToRusDict[$"{bank}"]}");
             rowNames.Add("Продажа" + "\n" + $"{EngToRusDict[$"{bank}"]}");
@@ -77,20 +122,14 @@ namespace CryptoParser.Models
 
          var range = $"{_sheet}!A{rowN}:K{rowN}";
          var rates = new List<object>() { rowName };
-         foreach (var bank in Binance.Banks)
+         var exchangesData = ServicesContainer.Get<ExchangesData>();
+         foreach (var bank in exchangesData.BanksNames)
          {
-            foreach (var currency in bank.Currencies)
-            {
-               if (currency.Name == currencyName)
-               {
-                  rates.Add(currency.BuyPrice);
-                  rates.Add(currency.SellPrice);
-                  break;
-               }
-            }
+            rates.Add(exchangesData.GetOffer("Binance", bank, currencyName, TradeType.Buy).Price);
+            rates.Add(exchangesData.GetOffer("Binance", bank, currencyName, TradeType.Sell).Price);
          }
-
          updateRangeValues(rates, range);
+
       }
 
       private void updateRangeValues(List<object> values, string range)
