@@ -2,9 +2,12 @@
 {
    public class Logger
    {
-      private readonly log4net.ILog _log;
+      private static readonly Logger _instance = new Logger();
+      private static log4net.ILog _log;
 
-      public Logger()
+      public static Logger Instance => _instance;
+
+      private Logger()
       {
          _log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
       }
