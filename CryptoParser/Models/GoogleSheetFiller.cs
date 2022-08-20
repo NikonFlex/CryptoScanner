@@ -46,6 +46,9 @@ namespace CryptoParser.Models
 
          var currencyTableFirstCell = new Cell() { Letter = "A", Number = 10 };
          fillTable(Tables.CurrencyTable.Create(Constants.CurrenciesNames[0]), currencyTableFirstCell);
+
+         var marketTableFirstCell = new Cell() { Letter = "A", Number = 17 };
+         fillTable(Tables.MarketsRatesTable.Create(), marketTableFirstCell);
       }
 
       private void updateTime(Cell timeCell)

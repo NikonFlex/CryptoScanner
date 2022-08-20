@@ -31,7 +31,7 @@ namespace CryptoParser.Services
       {
          Logger.Instance.Log.Info("Start parse exchanges");
 
-         ServicesContainer.Get<ExchangesData>().ClearOffers();
+         ServicesContainer.Get<ExchangesData>().ClearData();
 
          Models.Parsers.BinanceParser.UpdateDataAsync().ContinueWith(res =>
             ServicesContainer.Get<GoogleSheetFiller>().UpdateSheet()

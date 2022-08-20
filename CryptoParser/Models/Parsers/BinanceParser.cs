@@ -12,6 +12,14 @@ namespace CryptoParser.Models
 
          public static async Task UpdateDataAsync()
          {
+            await parseOffersAsync();
+            await parseMarketPricesAsync();
+
+            Services.Logger.Instance.Log.Info("Binance prices parsed");
+         }
+
+         private static async Task parseOffersAsync()
+         {
             foreach (string bankName in Constants.BanksNames)
             {
                Services.Logger.Instance.Log.Info($"Parse Binance {bankName} prices");
@@ -28,16 +36,14 @@ namespace CryptoParser.Models
 
                Services.Logger.Instance.Log.Info($"Binance {bankName} prices parsed");
             }
-
-            Services.Logger.Instance.Log.Info("Binance prices parsed");
          }
 
-         private static async Task<Offer> parseOfferAsync(string bankName, string assetName, TradeType tradeType)
+         private static async Task<Offer> parseOfferAsync(string bankName, string currencyName, TradeType tradeType)
          {
             string data = JsonConvert.SerializeObject(
                new
                {
-                  asset = assetName,
+                  asset = currencyName,
                   fiat = "RUB",
                   merchantCheck = false,
                   page = 1,
@@ -54,12 +60,39 @@ namespace CryptoParser.Models
                var responseString = await response.Content.ReadAsStringAsync();
                var responseJson = JObject.Parse(responseString);
                var minPrice = responseJson["data"][0]["adv"]["price"];
-               return new Offer("Binance", bankName, assetName, tradeType, (float)minPrice, "OK");
+               return new Offer("Binance", bankName, currencyName, tradeType, (float)minPrice, "OK");
             }
             catch (HttpRequestException e)
             {
                Services.Logger.Instance.Log.Info($"Binance parse exeption: {e.Message}");
-               return new Offer("Binance", bankName, assetName, tradeType, 0, "BadRequest");
+               return new Offer("Binance", bankName, currencyName, tradeType, 0, "BadRequest");
+            }
+         }
+
+         private static async Task parseMarketPricesAsync()
+         {
+            for (int i = 1; i < Constants.CurrenciesNames.Length; i++)
+            {
+               MarketRates price = await parseMarketPriceAsync(Constants.CurrenciesNames[i]);
+               Services.ServicesContainer.Get<ExchangesData>().AddMarketPrice(price);
+            }
+         }
+
+         private static async Task<MarketRates> parseMarketPriceAsync(string currencyName)
+         {
+            var requestUri = $"https://api.binance.com/api/v3/ticker/price?symbol={currencyName}USDT";
+            try
+            {
+               var response = await _client.GetAsync(requestUri);
+               var responseString = await response.Content.ReadAsStringAsync();
+               var responseJson = JObject.Parse(responseString);
+               var price = (float)responseJson["price"];
+               return new MarketRates("Binance", currencyName, price, "OK");
+            }
+            catch (HttpRequestException e)
+            {
+               Services.Logger.Instance.Log.Info($"Binance parse exeption: {e.Message}");
+               return new MarketRates("Binance", currencyName, 0, "OK");
             }
          }
       }
