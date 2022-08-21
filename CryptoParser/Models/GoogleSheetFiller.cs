@@ -48,7 +48,7 @@ namespace CryptoParser.Models
          fillTable(Tables.CurrencyTable.Create(Constants.CurrenciesNames[0]), currencyTableFirstCell);
 
          var marketTableFirstCell = new Cell() { Letter = "A", Number = 17 };
-         fillTable(Tables.MarketsRatesTable.Create(), marketTableFirstCell);
+         fillTable(Tables.MarketRatesTable.Create(), marketTableFirstCell);
       }
 
       private void updateTime(Cell timeCell)
@@ -85,7 +85,7 @@ namespace CryptoParser.Models
 
          var appendRequest = _service.Spreadsheets.Values.Update(valueRange, _spreadSheetId, range);
          appendRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.USERENTERED;
-         var appendResponde = appendRequest.Execute();
+         appendRequest.Execute();
       }
    }
 }

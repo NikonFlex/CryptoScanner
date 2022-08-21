@@ -3,16 +3,21 @@
    public class ExchangesData
    {
       private List<Offer> _offers = new();
-      private List<MarketRates> _marketPrices = new();
+      private List<MarketRate> _marketRates = new();
 
       public void ClearData()
       {
          _offers.Clear();
-         _marketPrices.Clear();
+         _marketRates.Clear();
       }
 
-      public void AddOffer(Offer offer) => _offers.Add(offer);
-      public void AddMarketPrice(MarketRates marketPrice) => _marketPrices.Add(marketPrice);
+      public void AddOffer(Offer offer)
+      {
+         CryptoParser.Services.Logger.Info($"Add offer: bank {offer.Bank} currency {offer.Currency}");
+         _offers.Add(offer);
+
+      }
+      public void AddMarketPrice(MarketRate marketPrice) => _marketRates.Add(marketPrice);
       
       public Offer? GetOffer(string exchange, string bank, string currency, TradeType tradeType)
       {
@@ -22,9 +27,9 @@
                                                 offer.TradeType == tradeType);
       }
 
-      public MarketRates? GetMarketRate(string exchange, string currency)
+      public MarketRate? GetMarketRate(string exchange, string currency)
       {
-         return _marketPrices.FirstOrDefault(price => price.Exchange == exchange &&
+         return _marketRates.FirstOrDefault(price => price.Exchange == exchange &&
                                                       price.Currency == currency);
       }
    }

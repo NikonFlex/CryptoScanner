@@ -2,7 +2,7 @@
 {
    namespace Tables
    {
-      public static class MarketsRatesTable
+      public static class MarketRatesTable
       {
          public static List<List<object>> Create()
          {
@@ -19,7 +19,7 @@
             string tableName = "Курсы на\nМаркете";
             var rowNames = new List<object>() { tableName };
 
-            for (int i = 1; i < Constants.CurrenciesNames.Length; i++)
+            for (int i = 0; i < Constants.CurrenciesNames.Length; i++)
                rowNames.Add(Constants.CurrenciesNames[i]);
 
             return rowNames;
@@ -31,9 +31,9 @@
             var rates = new List<object>() { rowName };
 
             var exchangesData = Services.ServicesContainer.Get<ExchangesData>();
-            for (int i = 1; i < Constants.CurrenciesNames.Length; i++)
-               rates.Add(exchangesData.GetMarketRate("Binance", Constants.CurrenciesNames[i]).Price);
-
+            foreach (var currencyName in Constants.CurrenciesNames)
+               rates.Add(exchangesData.GetMarketRate("Binance", currencyName).Price);
+            
             return rates;
          }
       }

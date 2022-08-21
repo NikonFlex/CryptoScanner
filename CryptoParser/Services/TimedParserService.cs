@@ -10,7 +10,7 @@ namespace CryptoParser.Services
 
       public Task StartAsync(CancellationToken cancellationToken)
       {
-         Logger.Instance.Log.Info("Timed Hosted Service running.");
+         Logger.Info("Timed Hosted Service running.");
 
          _timer = new Timer(ParseExchanges, null, TimeSpan.Zero,
              TimeSpan.FromSeconds(60));
@@ -20,7 +20,7 @@ namespace CryptoParser.Services
 
       public Task StopAsync(CancellationToken cancellationToken)
       {
-         Logger.Instance.Log.Info("Timed Hosted Service is stopping.");
+         Logger.Info("Timed Hosted Service is stopping.");
 
          _timer?.Change(Timeout.Infinite, 0);
 
@@ -29,8 +29,8 @@ namespace CryptoParser.Services
 
       private void ParseExchanges(object? state)
       {
-         Logger.Instance.Log.Info("Start parse exchanges");
-
+         Logger.Info("Start parse exchanges");
+         
          ServicesContainer.Get<ExchangesData>().ClearData();
 
          Models.Parsers.BinanceParser.UpdateDataAsync().ContinueWith(res =>

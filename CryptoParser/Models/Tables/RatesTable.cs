@@ -25,8 +25,8 @@
 
             foreach (var bank in Constants.BanksNames)
             {
-               rowNames.Add("Продажа" + "\n" + $"{Constants.EngToRusDict[$"{bank}"]}");
                rowNames.Add("Покупка" + "\n" + $"{Constants.EngToRusDict[$"{bank}"]}");
+               rowNames.Add("Продажа" + "\n" + $"{Constants.EngToRusDict[$"{bank}"]}");
             }
 
             return rowNames;
@@ -37,7 +37,7 @@
             string rowName = currencyName;
             var rates = new List<object>() { rowName };
 
-            var exchangesData = CryptoParser.Services.ServicesContainer.Get<ExchangesData>();
+            var exchangesData = Services.ServicesContainer.Get<ExchangesData>();
             foreach (var bank in Constants.BanksNames)
             {
                rates.Add(exchangesData.GetOffer("Binance", bank, currencyName, TradeType.Buy).Price);

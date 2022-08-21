@@ -40,7 +40,8 @@
                var buyOfferPrice = exchangesData.GetOffer("Binance", buyBank, currencyName, TradeType.Buy).Price;
                var sellOfferPrice = exchangesData.GetOffer("Binance", sellBank, currencyName, TradeType.Sell).Price;
 
-               spreads.Add(Constants.Balance / sellOfferPrice * buyOfferPrice - Constants.Balance);
+               var spread = Constants.Balance / sellOfferPrice * buyOfferPrice - Constants.Balance;
+               spreads.Add($"{spread - spread * 0.1}\n{Constants.Balance}/{sellOfferPrice}*{buyOfferPrice}-{spread * 0.1}");
             }
 
             return spreads;
