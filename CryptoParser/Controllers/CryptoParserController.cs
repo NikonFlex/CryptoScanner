@@ -11,17 +11,5 @@ namespace CryptoParser.Controllers
       {
          return DateTime.UtcNow.ToString();
       }
-
-   }
-
-   [ApiController]
-   [Route("[controller]")]
-   public class CryptoParser : ControllerBase
-   {
-      [HttpGet("GetAllUsers")]
-      public int ParsePrice()
-      {
-         return 1;
-      }
    }
 }

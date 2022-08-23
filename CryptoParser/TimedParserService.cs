@@ -1,6 +1,6 @@
 ﻿using CryptoParser.Models;
 
-namespace CryptoParser.Services
+namespace CryptoParser
 {
    public class TimedParserService : IHostedService, IDisposable
    {
@@ -30,12 +30,11 @@ namespace CryptoParser.Services
       private void ParseExchanges(object? state)
       {
          Logger.Info("Start parse exchanges");
-         
+
          ServicesContainer.Get<ExchangesData>().ClearData();
 
-         Models.Parsers.BinanceParser.UpdateDataAsync().ContinueWith(res =>
-            ServicesContainer.Get<GoogleSheetFiller>().UpdateSheet()
-            );
+         Task.WaitAll(Models.Parsers.BinanceParser.UpdateDataAsync(), Models.Parsers.OKXParser.UpdateDataAsync());
+         ServicesContainer.Get<GoogleSheetFiller>().UpdateSheet();
       }
 
       public void Dispose()

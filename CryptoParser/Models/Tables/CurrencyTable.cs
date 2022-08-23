@@ -2,46 +2,51 @@
 {
    namespace Tables
    {
-      public static class CurrencyTable
+      [Table("Currency")]
+      public class CurrencyTable : ITable
       {
-         public static List<List<object>> Create(string currencyName)
+         private ExchangeType _exchange;
+         private string _currency;
+
+         public CurrencyTable(ExchangeType exchange, string currency)
+         {
+            _exchange = exchange;
+            _currency = currency;
+         }
+
+         public List<List<object>> CreateTable()
          {
             List<List<object>> table = new();
 
-            table.Add(createHeaderRow(currencyName));
-
-            foreach (var sellBank in Constants.BanksNames)
-            {
-               table.Add(createRow(currencyName, sellBank));
-            }
-
+            table.Add(createHeaderRow());
+            Constants.BanksNames(_exchange).ToList().ForEach(bank => table.Add(createRow(bank)));
+            
             return table;
          }
 
-         private static List<object> createHeaderRow(string currencyName)
+         private List<object> createHeaderRow()
          {
-            string tableName = currencyName;
+            string tableName = _currency;
             var rowNames = new List<object>() { tableName };
 
-            foreach (var bank in Constants.BanksNames)
-               rowNames.Add("Покупка" + "\n" + $"{Constants.EngToRusDict[$"{bank}"]}");
-
+            Constants.BanksNames(_exchange).ToList().ForEach(bank => rowNames.Add("Покупка" + "\n" + $"{Constants.EngToRusDict[$"{bank}"]}"));
+            
             return rowNames;
          }
 
-         private static List<object> createRow(string currencyName, string sellBank)
+         private List<object> createRow(string sellBank)
          {
             string rowName = "Продажа" + "\n" + $"{Constants.EngToRusDict[$"{sellBank}"]}";
             var spreads = new List<object>() { rowName };
 
-            var exchangesData = Services.ServicesContainer.Get<ExchangesData>();
-            foreach (var buyBank in Constants.BanksNames)
+            var exchangesData = ServicesContainer.Get<ExchangesData>();
+            foreach (var buyBank in Constants.BanksNames(_exchange))
             {
-               var buyOfferPrice = exchangesData.GetOffer("Binance", buyBank, currencyName, TradeType.Buy).Price;
-               var sellOfferPrice = exchangesData.GetOffer("Binance", sellBank, currencyName, TradeType.Sell).Price;
+               var buyOfferPrice = exchangesData.GetOffer(_exchange, buyBank, _currency, TradeType.Buy).Price;
+               var sellOfferPrice = exchangesData.GetOffer(_exchange, sellBank, _currency, TradeType.Sell).Price;
 
                var spread = Constants.Balance / sellOfferPrice * buyOfferPrice - Constants.Balance;
-               spreads.Add($"{spread - spread * 0.1}\n{Constants.Balance}/{sellOfferPrice}*{buyOfferPrice}-{spread * 0.1}");
+               spreads.Add(Math.Round(spread - spread * 0.1, 2));
             }
 
             return spreads;

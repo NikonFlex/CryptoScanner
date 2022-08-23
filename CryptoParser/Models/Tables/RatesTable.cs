@@ -1,29 +1,33 @@
 ﻿namespace CryptoParser.Models
 {
-   namespace Tables 
-   { 
-      public static class RatesTable
+   namespace Tables
+   {
+      [Table("Rates")]
+      public class RatesTable : ITable
       {
-         public static List<List<object>> Create()
+         private ExchangeType _exchange;
+
+         public RatesTable(ExchangeType exchange, string emptyParam)
+         {
+            _exchange = exchange;
+         }
+
+         public List<List<object>> CreateTable()
          {
             List<List<object>> table = new();
 
             table.Add(createHeaderRow());
-
-            foreach (var currencyName in Constants.CurrenciesNames)
-            {
-               table.Add(createRow(currencyName));
-            }
-
+            Constants.CurrenciesNames(_exchange).ToList().ForEach(currency => table.Add(createRow(currency)));
+            
             return table;
          }
 
-         private static List<object> createHeaderRow()
+         private List<object> createHeaderRow()
          {
             string tableName = "RUB Курсы:";
             var rowNames = new List<object>() { tableName };
 
-            foreach (var bank in Constants.BanksNames)
+            foreach (var bank in Constants.BanksNames(_exchange))
             {
                rowNames.Add("Покупка" + "\n" + $"{Constants.EngToRusDict[$"{bank}"]}");
                rowNames.Add("Продажа" + "\n" + $"{Constants.EngToRusDict[$"{bank}"]}");
@@ -32,16 +36,16 @@
             return rowNames;
          }
 
-         private static List<object> createRow(string currencyName)
+         private List<object> createRow(string currency)
          {
-            string rowName = currencyName;
+            string rowName = currency;
             var rates = new List<object>() { rowName };
 
-            var exchangesData = Services.ServicesContainer.Get<ExchangesData>();
-            foreach (var bank in Constants.BanksNames)
+            var exchangesData = ServicesContainer.Get<ExchangesData>();
+            foreach (var bank in Constants.BanksNames(_exchange))
             {
-               rates.Add(exchangesData.GetOffer("Binance", bank, currencyName, TradeType.Buy).Price);
-               rates.Add(exchangesData.GetOffer("Binance", bank, currencyName, TradeType.Sell).Price);
+               rates.Add(Math.Round(exchangesData.GetOffer(_exchange, bank, currency, TradeType.Buy).Price, 2));
+               rates.Add(Math.Round(exchangesData.GetOffer(_exchange, bank, currency, TradeType.Sell).Price, 2));
             }
 
             return rates;

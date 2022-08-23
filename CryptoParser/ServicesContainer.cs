@@ -1,6 +1,6 @@
 ﻿using Unity;
 
-namespace CryptoParser.Services
+namespace CryptoParser
 {
    public static class ServicesContainer
    {

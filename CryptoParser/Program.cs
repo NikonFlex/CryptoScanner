@@ -1,5 +1,5 @@
-using CryptoParser.Services;
 using CryptoParser.Models;
+using CryptoParser;
 
 var builder = WebApplication.CreateBuilder(args);
 

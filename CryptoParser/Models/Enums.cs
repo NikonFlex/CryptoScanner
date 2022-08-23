@@ -1,12 +1,18 @@
 ﻿namespace CryptoParser.Models
 {
+   public enum ExchangeType
+   {
+      Binance,
+      OKX,
+   }
+
    public enum TradeType
    { 
       Buy,
       Sell,
    }
 
-   static class TradeTypesExtensions
+   static class EnumExtensions
    {
       public static string TypeToString(this TradeType type)
       {

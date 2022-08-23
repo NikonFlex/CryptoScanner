@@ -1,4 +1,4 @@
-﻿namespace CryptoParser.Services
+﻿namespace CryptoParser
 {
    public class Logger
    {

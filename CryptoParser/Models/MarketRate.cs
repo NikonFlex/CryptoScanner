@@ -2,12 +2,12 @@
 {
    public class MarketRate
    {
-      public string Exchange { get; private set; }
+      public ExchangeType Exchange { get; private set; }
       public string Currency { get; private set; }
       public float Price { get; private set; }
       public string Message { get; private set; }
 
-      public MarketRate(string exchange, string currency, float price, string message)
+      public MarketRate(ExchangeType exchange, string currency, float price, string message)
       {
          Exchange = exchange;
          Currency = currency;

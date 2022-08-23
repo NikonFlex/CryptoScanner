@@ -2,9 +2,17 @@
 {
    namespace Tables
    {
-      public static class MarketRatesTable
+      [Table("MarketRates")]
+      public class MarketRatesTable : ITable
       {
-         public static List<List<object>> Create()
+         private ExchangeType _exchange;
+
+         public MarketRatesTable(ExchangeType exchange, string emptyParam)
+         {
+            _exchange = exchange;
+         }
+
+         public List<List<object>> CreateTable()
          {
             List<List<object>> table = new();
 
@@ -14,25 +22,23 @@
             return table;
          }
 
-         private static List<object> createHeaderRow()
+         private List<object> createHeaderRow()
          {
             string tableName = "Курсы на\nМаркете";
             var rowNames = new List<object>() { tableName };
 
-            for (int i = 0; i < Constants.CurrenciesNames.Length; i++)
-               rowNames.Add(Constants.CurrenciesNames[i]);
-
+            Constants.CurrenciesNames(_exchange).ToList().ForEach(currency => rowNames.Add(currency));
+            
             return rowNames;
          }
 
-         private static List<object> createRow()
+         private List<object> createRow()
          {
             string rowName = "Курсы";
             var rates = new List<object>() { rowName };
 
-            var exchangesData = Services.ServicesContainer.Get<ExchangesData>();
-            foreach (var currencyName in Constants.CurrenciesNames)
-               rates.Add(exchangesData.GetMarketRate("Binance", currencyName).Price);
+            var exchangesData = ServicesContainer.Get<ExchangesData>();
+            Constants.CurrenciesNames(_exchange).ToList().ForEach(currency => rates.Add(exchangesData.GetMarketRate(_exchange, currency).Price));
             
             return rates;
          }
