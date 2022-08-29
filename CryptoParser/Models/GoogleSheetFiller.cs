@@ -19,28 +19,59 @@ namespace CryptoParser.Models
 
       public Cell(string cell)
       {
-         var cellCoord = cell.Split(':');
-         Sheet = cellCoord[0];
-         Column = cellCoord[1];
-         Row = Int32.Parse(cellCoord[2]);
+         try
+         {
+            var cellCoord = cell.Split(':');
+            Sheet = cellCoord[0];
+            Column = cellCoord[1];
+            Row = Int32.Parse(cellCoord[2]);
+         }
+         catch
+         {
+            throw new Exception($"Invalid cell {cell}");
+         }
       }
 
       public string ToCellName() => $"{Column}{Row}";
+
+      public Cell Offset(int offset)
+      {
+         char firstLetterInChar = char.Parse(Column);
+         int firstLetterInInt = (int)firstLetterInChar;
+         char lastLetterInChar;
+         if (offset < 26)
+         {
+            int lastLetterInInt = firstLetterInInt + offset;
+            lastLetterInChar = (char)lastLetterInInt;
+         }
+         else
+         {
+            int lastLetterInInt = firstLetterInInt + offset % 26;
+            lastLetterInChar = (char)lastLetterInInt;
+         }
+
+         return new Cell(Sheet, lastLetterInChar.ToString(), Row);
+      }
    }
 
    public class GoogleSheetFiller
    {
       private readonly string[] _scopes = { SheetsService.Scope.Spreadsheets };
       private readonly string _applicationName = "ExchangesInfo";
-      private readonly string _spreadSheetId = "1hr3GQofkjQ62P1k4hwX1N2CpOWJpu8wqiE4Kx-IT8MM";
-      private Dictionary<string, Type> _allTables = new();
+      private readonly string _spreadSheetId;
+      private int _balance;
+      private SpreadType _spreadType;
+      private Dictionary<string, Type> _simpleTables = new();
+      private Dictionary<string, Type> _hardTables = new();
       private SheetsService _service;
       private List<ValueRange> _requests = new();
 
-      public GoogleSheetFiller()
+      public GoogleSheetFiller(string spreadSheetId)
       {
+         _spreadSheetId = spreadSheetId;
+
          GoogleCredential credential;
-         using (var stream = new FileStream("nikoncryptoprototype-92a9ba4e6df8.json", 
+         using (var stream = new FileStream("nikoncrypto-8b34e56c51e9.json", 
                                              FileMode.Open, 
                                              FileAccess.Read))
          {
@@ -54,49 +85,109 @@ namespace CryptoParser.Models
             ApplicationName = _applicationName,
          });
 
-         var types = from assembly in AppDomain.CurrentDomain.GetAssemblies()
+         //collect simple tables types
+         var simpleTypes = from assembly in AppDomain.CurrentDomain.GetAssemblies()
                      from type in assembly.GetTypes()
-                     where type.IsDefined(typeof(Tables.TableAttribute), true)
+                     where type.IsDefined(typeof(Tables.SimpleTableAttribute), true)
                      select type;
 
-         foreach (var type in types)
+         foreach (var type in simpleTypes)
          {
-            Tables.TableAttribute attribute = (Tables.TableAttribute)Attribute.GetCustomAttribute(type, typeof(Tables.TableAttribute));
-            _allTables.Add(attribute.Name, type);
+            Tables.SimpleTableAttribute attribute = (Tables.SimpleTableAttribute)Attribute.GetCustomAttribute(type, typeof(Tables.SimpleTableAttribute));
+            _simpleTables.Add(attribute.Name, type);
+         }
+
+         //collect hard tables types
+         var hardTypes = from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                     from type in assembly.GetTypes()
+                     where type.IsDefined(typeof(Tables.HardTableAttribute), true)
+                     select type;
+
+         foreach (var type in hardTypes)
+         {
+            Tables.HardTableAttribute attribute = (Tables.HardTableAttribute)Attribute.GetCustomAttribute(type, typeof(Tables.HardTableAttribute));
+            _hardTables.Add(attribute.Name, type);
          }
       }
 
-      public void UpdateSheet()
+      public void UpdateSpreadSheet()
       {
          _requests.Clear();
+         readSettings();
+         updateTime();
          createRequests();
          updateBookValues();
       }
 
-      private void createRequests()
+      private void readSettings()
       {
-         updateTime(new Cell("Binance1", "A", 1));
+         var range = $"Описание и настройки!B2:C2";
+         var request = _service.Spreadsheets.Values.Get(_spreadSheetId, range);
 
-         foreach (var tableName in Constants.TablesPos.Keys)
+         var response = request.Execute();
+         var values = response.Values;
+         if (values != null && values.Count == 1)
          {
-            var parameters = tableName.Split('|');
-            var tableType = parameters[0];
-            var exchange = parameters[1];
-            var tableParam = parameters[2];
-
-            var type = _allTables[tableType];
-            var constructor = type.GetConstructor(new Type[] { typeof(ExchangeType), typeof(string) });
-            var instance = constructor?.Invoke(new object[] { Utils.GetExchangeTypeFrom(exchange), tableParam });
-            var table = instance as Tables.ITable;
-
-            fillTable(table?.CreateTable(), new Cell(Constants.TablesPos[tableName]));
+            _balance = Int32.Parse(values[0][1].ToString());
+            _spreadType = Utils.GetSpreadTypeFrom((string)values[0][0]);
          }
       }
 
-      private void updateTime(Cell timeCell) => _requests.Add(createRequest(new List<object>() { "Update:", DateTime.Now.ToString() }, createRange(timeCell, 1)));
+      private void createRequests()
+      {
+         createSimpleTablesRequests();
+         createHardTablesRequests();
+      }
+
+      private void createSimpleTablesRequests()
+      {
+         foreach (var tableName in Constants.SimpleTablesRanges.Keys)
+         {
+            var parameters = tableName.Split('|');
+            var tableType = parameters[0];
+            var cvb = parameters[1];
+            var tableParam = parameters[2];
+
+            var type = _simpleTables[tableType];
+            if (type == null)
+               throw new Exception($"Invalid table name {tableName}");
+
+            var constructor = type.GetConstructor(new Type[] { typeof(CVBType), typeof(string) });
+            var instance = constructor?.Invoke(new object[] { Utils.GetCVBTypeFrom(cvb), tableParam });
+            var table = instance as Tables.ITable;
+
+            fillTable(table?.CreateTable(_balance, _spreadType), new Cell(Constants.SimpleTablesRanges[tableName]));
+         }
+      }
+
+      private void createHardTablesRequests()
+      {
+         foreach (var tableName in Constants.HardTablesRanges.Keys)
+         {
+            var parameters = tableName.Split('|');
+            var tableType = parameters[0];
+            var buyCvb = parameters[1];
+            var sellCvb = parameters[2];
+            var tableParam1 = parameters[3];
+            var tableParam2 = parameters[4];
+
+            var type = _hardTables[tableType];
+            if (type == null)
+               throw new Exception($"Invalid table name {tableName}");
+
+            var constructor = type.GetConstructor(new Type[] { typeof(CVBType), typeof(CVBType), typeof(string), typeof(string) });
+            var instance = constructor?.Invoke(new object[] { Utils.GetCVBTypeFrom(buyCvb), Utils.GetCVBTypeFrom(sellCvb), tableParam1, tableParam2 });
+            var table = instance as Tables.ITable;
+
+            fillTable(table?.CreateTable(_balance, _spreadType), new Cell(Constants.HardTablesRanges[tableName]));
+         }
+      }
+
+      private void updateTime() => _requests.Add(createRequest(new List<object>() { DateTime.UtcNow.ToString() }, createRange(new Cell(Constants.TimePos), 1)));
 
       private void fillTable(List<List<object>> table, Cell topleft)
       {
+         
          int currentRow = topleft.Row;
          foreach (var row in table)
          {
@@ -107,11 +198,7 @@ namespace CryptoParser.Models
 
       private string createRange(Cell firstCell, int tableWidth)
       {
-         char firstLetterInChar = char.Parse(firstCell.Column);
-         int firstLetterInInt = (int)firstLetterInChar;
-         int lastLetterInInt = firstLetterInInt + tableWidth;
-         char lastLetterInChar = (char)lastLetterInInt;
-         Cell lastCell = new(firstCell.Sheet, lastLetterInChar.ToString(), firstCell.Row);
+         Cell lastCell = firstCell.Offset(tableWidth);
          return $"{firstCell.Sheet}!{firstCell.ToCellName()}:{lastCell.ToCellName()}";
       }
 

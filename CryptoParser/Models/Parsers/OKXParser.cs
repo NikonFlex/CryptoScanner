@@ -5,11 +5,18 @@ namespace CryptoParser.Models
 {
    namespace Parsers
    {
-      public static class OKXParser
+      [Parser]
+      public class OKXParser : IParser
       {
-         private static readonly HttpClient _client = new HttpClient();
+         private readonly HttpClient _client = new HttpClient();
+         private CVBData _cvbData;
 
-         public static async Task UpdateDataAsync()
+         public OKXParser()
+         {
+            _cvbData = Constants.GetCVBData(CVBType.OKX);
+         }
+
+         public async Task UpdateDataAsync()
          {
             Logger.Info("Start parse OKX prices");
 
@@ -18,95 +25,96 @@ namespace CryptoParser.Models
             Logger.Info("OKX prices parsed");
          }
 
-         private static async Task parseOffersAsync()
+         private async Task parseOffersAsync()
          {
             Logger.Info($"Parse OKX offers process started");
 
             List<Task<Offer>> tasks = new();
 
-            foreach (string bankName in Constants.BanksNames(ExchangeType.OKX))
+            foreach (string bank in _cvbData.Banks)
             {
-               foreach (string currencyName in Constants.CurrenciesNames(ExchangeType.OKX))
+               foreach (string currency in _cvbData.Currencies)
                {
-                  tasks.Add(parseOfferAsync(bankName, currencyName, TradeType.Buy));
-                  tasks.Add(parseOfferAsync(bankName, currencyName, TradeType.Sell));
+                  tasks.Add(parseOfferAsync(bank, currency, TradeType.Buy));
+                  tasks.Add(parseOfferAsync(bank, currency, TradeType.Sell));
                }
             }
             Logger.Info($"Parse OKX offers process passed");
 
             await Task.WhenAll(tasks.ToArray());
-            tasks.ForEach(task => ServicesContainer.Get<ExchangesData>().AddOffer(task.Result));
+            tasks.ForEach(task => ServicesContainer.Get<CVBsData>().AddOffer(task.Result));
 
             Logger.Info($"Parse OKX offers process finished");
          }
 
-         private static async Task<Offer> parseOfferAsync(string bankName, string currencyName, TradeType tradeType)
+         private async Task<Offer> parseOfferAsync(string bank, string currency, TradeType tradeType)
          {
             try
             {
-               var requestUri = $"https://www.okx.com/v3/c2c/tradingOrders/books?t={DateTime.UtcNow.Ticks}&quoteCurrency=rub&baseCurrency={currencyName}&side={tradeType.TypeToString()}&paymentMethod={bankName}&userType=all&showTrade=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false";
+               var requestUri = $"https://www.okx.com/v3/c2c/tradingOrders/books?t={DateTime.UtcNow.Ticks}&quoteCurrency=rub&baseCurrency={currency}&side={tradeType.TypeToString()}&paymentMethod={bank}&userType=all&showTrade=false&showFollow=false&showAlreadyTraded=false&isAbleFilter=false";
                var response = await _client.GetAsync(requestUri);
                var responseString = await response.Content.ReadAsStringAsync();
                var responseJson = JObject.Parse(responseString);
                float minPrice;
-               if (tradeType == TradeType.Buy)
-               {
-                  minPrice = (float)responseJson["data"]["buy"][0]["price"];
-                  return new Offer(ExchangeType.OKX, bankName, currencyName, TradeType.Sell, minPrice, "OK");
-               }
-               else
-               {
-                  minPrice = (float)responseJson["data"]["sell"][0]["price"];
-                  return new Offer(ExchangeType.OKX, bankName, currencyName, TradeType.Buy, minPrice, "OK");
-               }
 
-               Logger.Info($"OKX Offer: {bankName}, {currencyName}, {tradeType.TypeToString()} parsed successfully");
+               minPrice = (float)responseJson["data"][tradeType == TradeType.Buy ? "buy" : "sell"][0]["price"];
+               return new Offer(CVBType.OKX, bank, currency, tradeType == TradeType.Buy ? TradeType.Sell : TradeType.Buy, minPrice, "OK");
+
+               Logger.Info($"OKX Offer: {bank}, {currency}, {tradeType.TypeToString()} parsed successfully");
             }
             catch (HttpRequestException e)
             {
-               Logger.Info($"OKX  parse exeption: {e.Message}");
-               return new Offer(ExchangeType.OKX, bankName, currencyName, tradeType, 0, "BadRequest");
+               Logger.Info($"OKX parse exeption: {e.Message}");
+               return new Offer(CVBType.OKX, bank, currency, tradeType == TradeType.Buy ? TradeType.Sell : TradeType.Buy, 0, "BadRequest");
+            }
+            catch (Exception e)
+            {
+               Logger.Info($"OKX read answer exeption: {e.Message}");
+               return new Offer(CVBType.OKX, bank, currency, tradeType == TradeType.Buy ? TradeType.Sell : TradeType.Buy, 0, e.Message);
             }
          }
 
-         private static async Task parseMarketPricesAsync()
+         private async Task parseMarketPricesAsync()
          {
             Logger.Info($"Parse OKX marketPrices process started");
 
             List<Task<MarketRate>> tasks = new();
-
-            foreach (var currencyName in Constants.CurrenciesNames(ExchangeType.OKX))
-               tasks.Add(parseMarketPriceAsync(currencyName));
-
+            _cvbData.Currencies.ToList().ForEach(currency => tasks.Add(parseMarketPriceAsync(currency)));
+            
             Logger.Info($"Parse OKX marketPrices process passed");
 
             await Task.WhenAll(tasks.ToArray());
-            tasks.ForEach(rate => ServicesContainer.Get<ExchangesData>().AddMarketPrice(rate.Result));
+            tasks.ForEach(rate => ServicesContainer.Get<CVBsData>().AddMarketPrice(rate.Result));
 
             Logger.Info($"Parse OKX marketPrices process finished");
          }
 
-         private static async Task<MarketRate> parseMarketPriceAsync(string currencyName)
+         private async Task<MarketRate> parseMarketPriceAsync(string currency)
          {
-            if (currencyName == "USDT")
-               return new MarketRate(ExchangeType.OKX, currencyName, 1, "OK");
+            if (currency == "USDT")
+               return new MarketRate(CVBType.OKX, currency, 1, "OK");
 
             try
             {
-               var requestUri = $"https://www.okx.com/api/v5/market/ticker?instId={currencyName}-USD-SWAP";
+               var requestUri = $"https://www.okx.com/api/v5/market/ticker?instId={currency}-USD-SWAP";
                var response = await _client.GetAsync(requestUri);
                var responseString = await response.Content.ReadAsStringAsync();
                var responseJson = JObject.Parse(responseString);
                var price = (float)responseJson["data"][0]["last"];
 
-               Logger.Info($"OKX MarketPrice: {currencyName} parsed successfully");
+               Logger.Info($"OKX MarketPrice: {currency} parsed successfully");
 
-               return new MarketRate(ExchangeType.OKX, currencyName, price, "OK");
+               return new MarketRate(CVBType.OKX, currency, price, "OK");
             }
             catch (HttpRequestException e)
             {
                Logger.Info($"OKX parse exeption: {e.Message}");
-               return new MarketRate(ExchangeType.OKX, currencyName, 0, "OK");
+               return new MarketRate(CVBType.OKX, currency, 0, "BadRequest");
+            }
+            catch (Exception e)
+            {
+               Logger.Info($"OKX read answer exeption: {e.Message}");
+               return new MarketRate(CVBType.OKX, currency, 0, e.Message);
             }
          }
       }

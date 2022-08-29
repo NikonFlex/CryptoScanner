@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "nikoncrypto",
+  "private_key_id": "8b34e56c51e92e78d6f46edea575acc379c89c04",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC2/v5y3z1JcBBF\nCgVzyr298x4gli0bvsP3zg3brWeuz1m/DwOSGZn2+YfgZU/UD+alHjTR1B1lR/5c\ngy7CMoED6k6F3nts8lxY0sTBl8/21E6k2T15u2m8d4FVsuZ0EOPz2uwe/BVUq+Gu\nUscGhDq5VmSygJQPtq5wVQY93Z010e0lMTi1zeuNf7SnEw1oik+/ppj024ttZrOt\nRmeIQl1hqJsa+tCQ7Zo/ventmzu126HQ35ckxCXZSOIqVxAXtT1dV+5ABkOf7FaV\nbWVpB6WA+pQRC4v7Y8/df9+m2QgVw9JR7CqyNnC0HhnJwhd26dwufrD39Tvr9YlI\nRS1i3PC9AgMBAAECggEAAJrvyv/3gyxqdVv+4B7pyTzKWve8LvUOz11AWPtmFiMr\n7BCX5a4Nfw5ct26GWNBzphSnPpFpxnm6OuKZLz29BP8LovA1LstPaGDME0rV/n49\nw1hPln068Itho1+r2PLsWhRdhw204VqPLMUr0NbzncTOIPQBaVrkkU0Kr/4xZKnr\nY5+FFECTbrQ7tTHasoyEcCjUajq8dHTvANKRIavQTvvozmwd+l0HCFkQJhJY+ExS\nhY3VXJPxHKMhUnRjuXJOmHKSEeM22e8BzPSx8psbALZePGRxMZXQ7a6G9z8PLh93\na7xJ34jI24bBbWVKUJv4MYKJoNbxFM5VxDYitX/LIQKBgQDsyTasqufPXQ7Moc9A\ns+YA5lJcqyqaTbWg1uurxSg2oXtAoafkGmg3KIyErFYzhkSm4toxgAOP1P6VLP39\nL1+4TfUMH9xzgEwBtoH/JeX73IV/YiVIKPRpSW1sklg+BSLAWjhjdNOa+TVVwbGf\ngtOaQRFr5ECsqUCGwhavOpAgnQKBgQDF2GUyQQuvyhTiym69wts+ZnKPfAEJst5M\nHNdkYEBD7RijA5noDpRGAYZwBVWEnkQ4yZQc0PrTVvm9Y0MDKBNUVcKH0nd7gFjl\nAcQ+C47I3GqDGir2IiWRGZZC7FEKzzN5EupGamBOIPB/WZjuLjb4beRlaBH1bVMw\niBGmc0vGoQKBgB4IBx8vLedm7hGWFCsopetHSvrl2qlnYbnciFdo0gjbwj4YQqrz\njnQweGH7WZN/XAWuj+3nRoxff0p8QlpyP7moaYP4JoWfqAQvmZ06uUiQV34ofIIC\nb71Kys4SYY68KAQtbSlwD8aABPuzbUvF1ACkcAk3EdzUOpLc2vOugckhAoGAW8y5\nv+SwkIOax1SYp9InOr/8fhlSvfZR8U0coEWM7DeyS8la+3LwV79Tatz+vkdVbmgS\nIoDRMYjU3oyVRnys41/boHwG1rZKCRCVxxhDy22CuoxEzOoxNi+CKlFOlU5pGs+t\nBrlLMFVWYjDnpfSpqwIKjQcJ9jAg/o7UacBrs6ECgYEApd3fZC3CJVMS5WLzwiiy\nSVrQlROahjXH75qjwcrwpLJZCV+8ee743k+2KLp81ds3P9zR/OpFPQ3r0wIHxA23\nKyacKdFhGjXLC53AdmUdDPAFsx47K3qreEiJUQgiOx+oQ+8JtifEDT6Dl0Id6YQl\nnmJlayNBwKhALM9rmr8//uM=\n-----END PRIVATE KEY-----\n",
+  "client_email": "crypto@nikoncrypto.iam.gserviceaccount.com",
+  "client_id": "101606240539339246320",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/crypto%40nikoncrypto.iam.gserviceaccount.com"
+}

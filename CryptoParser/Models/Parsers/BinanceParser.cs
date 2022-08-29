@@ -6,11 +6,18 @@ namespace CryptoParser.Models
 {
    namespace Parsers
    {
-      public static class BinanceParser
+      [Parser]
+      public class BinanceParser : IParser
       {
-         private static readonly HttpClient _client = new HttpClient();
+         private readonly HttpClient _client = new HttpClient();
+         private CVBData _cvbData;
 
-         public static async Task UpdateDataAsync()
+         public BinanceParser()
+         {
+            _cvbData = Constants.GetCVBData(CVBType.Binance);
+         }
+
+         public async Task UpdateDataAsync()
          {
             Logger.Info("Start parse Binance prices");
 
@@ -19,29 +26,29 @@ namespace CryptoParser.Models
             Logger.Info("Binance prices parsed");
          }
 
-         private static async Task parseOffersAsync()
+         private async Task parseOffersAsync()
          {
             Logger.Info($"Parse Binance offers process started");
 
             List<Task<Offer>> tasks = new();
 
-            foreach (string bankName in Constants.BanksNames(ExchangeType.Binance))
+            foreach (string bank in _cvbData.Banks)
             {
-               foreach (string currencyName in Constants.CurrenciesNames(ExchangeType.Binance))
+               foreach (string currency in _cvbData.Currencies)
                {
-                  tasks.Add(parseOfferAsync(bankName, currencyName, TradeType.Buy));
-                  tasks.Add(parseOfferAsync(bankName, currencyName, TradeType.Sell));
+                  tasks.Add(parseOfferAsync(bank, currency, TradeType.Buy));
+                  tasks.Add(parseOfferAsync(bank, currency, TradeType.Sell));
                }
             }
-            Logger.Info($"Parse Binance offers process passed");
+            Logger.Info($"Parse Binance offers process passed, {tasks.Count} tasks created");
 
             await Task.WhenAll(tasks.ToArray());
-            tasks.ForEach(task => ServicesContainer.Get<ExchangesData>().AddOffer(task.Result));
+            tasks.ForEach(task => ServicesContainer.Get<CVBsData>().AddOffer(task.Result));
 
             Logger.Info($"Parse Binance offers process finished");
          }
 
-         private static async Task<Offer> parseOfferAsync(string bankName, string currencyName, TradeType tradeType)
+         private async Task<Offer> parseOfferAsync(string bank, string currency, TradeType tradeType)
          {
 
             try
@@ -49,11 +56,11 @@ namespace CryptoParser.Models
                string data = JsonConvert.SerializeObject(
                   new
                   {
-                     asset = currencyName,
+                     asset = currency,
                      fiat = "RUB",
                      merchantCheck = false,
                      page = 1,
-                     payTypes = new[] { bankName },
+                     payTypes = new[] { bank },
                      rows = 1,
                      tradeType = tradeType.TypeToString()
                   });
@@ -64,55 +71,63 @@ namespace CryptoParser.Models
                var responseJson = JObject.Parse(responseString);
                var minPrice = responseJson["data"][0]["adv"]["price"];
 
-               Logger.Info($"Binance Offer: {bankName}, {currencyName}, {tradeType.TypeToString()} parsed successfully");
+               Logger.Info($"Binance Offer: {bank}, {currency}, {tradeType.TypeToString()} parsed successfully");
 
-               return new Offer(ExchangeType.Binance, bankName, currencyName, tradeType, (float)minPrice, "OK");
+               return new Offer(CVBType.Binance, bank, currency, tradeType, (float)minPrice, "OK");
             }
             catch (HttpRequestException e)
             {
                Logger.Info($"Binance parse exeption: {e.Message}");
-               return new Offer(ExchangeType.Binance, bankName, currencyName, tradeType, 0, "BadRequest");
+               return new Offer(CVBType.Binance, bank, currency, tradeType, 0, "BadRequest");
+            }
+            catch (Exception e)
+            {
+               Logger.Info($"Binance read answer exeption: {e.Message}");
+               return new Offer(CVBType.Binance, bank, currency, tradeType, 0, e.Message);
             }
          }
 
-         private static async Task parseMarketPricesAsync()
+         private async Task parseMarketPricesAsync()
          {
             Logger.Info($"Parse Binance marketPrices process started");
 
             List<Task<MarketRate>> tasks = new();
-
-            foreach (var currencyName in Constants.CurrenciesNames(ExchangeType.Binance))
-               tasks.Add(parseMarketPriceAsync(currencyName));
+            _cvbData.Currencies.ToList().ForEach(currency => tasks.Add(parseMarketPriceAsync(currency)));
             
-            Logger.Info($"Parse Binance marketPrices process passed");
+            Logger.Info($"Parse Binance marketPrices process passed, {tasks.Count} tasks created");
 
             await Task.WhenAll(tasks.ToArray());
-            tasks.ForEach(rate => ServicesContainer.Get<ExchangesData>().AddMarketPrice(rate.Result));
+            tasks.ForEach(rate => ServicesContainer.Get<CVBsData>().AddMarketPrice(rate.Result));
 
             Logger.Info($"Parse Binance marketPrices process finished");
          }
 
-         private static async Task<MarketRate> parseMarketPriceAsync(string currencyName)
+         private async Task<MarketRate> parseMarketPriceAsync(string currency)
          {
-            if (currencyName == "USDT")
-               return new MarketRate(ExchangeType.Binance, currencyName, 1, "OK");
+            if (currency == "USDT")
+               return new MarketRate(CVBType.Binance, currency, 1, "OK");
 
-            var requestUri = $"https://api.binance.com/api/v3/ticker/price?symbol={currencyName}USDT";
             try
             {
+               var requestUri = $"https://api.binance.com/api/v3/ticker/price?symbol={currency}USDT";
                var response = await _client.GetAsync(requestUri);
                var responseString = await response.Content.ReadAsStringAsync();
                var responseJson = JObject.Parse(responseString);
                var price = (float)responseJson["price"];
 
-               Logger.Info($"Binance MarketPrice: {currencyName} parsed successfully");
+               Logger.Info($"Binance MarketPrice: {currency} parsed successfully");
 
-               return new MarketRate(ExchangeType.Binance, currencyName, price, "OK");
+               return new MarketRate(CVBType.Binance, currency, price, "OK");
             }
             catch (HttpRequestException e)
             {
                Logger.Info($"Binance parse exeption: {e.Message}");
-               return new MarketRate(ExchangeType.Binance, currencyName, 0, "OK");
+               return new MarketRate(CVBType.Binance, currency, 0, "BadRequest");
+            }
+            catch (Exception e)
+            {
+               Logger.Info($"Binance read answer exeption: {e.Message}");
+               return new MarketRate(CVBType.Binance, currency, 0, e.Message);
             }
          }
       }

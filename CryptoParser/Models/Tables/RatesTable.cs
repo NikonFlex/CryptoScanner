@@ -2,50 +2,52 @@
 {
    namespace Tables
    {
-      [Table("Rates")]
+      [SimpleTable("Rates")]
       public class RatesTable : ITable
       {
-         private ExchangeType _exchange;
+         private CVBData _cvbData;
 
-         public RatesTable(ExchangeType exchange, string emptyParam)
+         public RatesTable(CVBType cvb, string _)
          {
-            _exchange = exchange;
+            _cvbData = Constants.GetCVBData(cvb);
          }
 
-         public List<List<object>> CreateTable()
+         public List<List<object>> CreateTable(int balance, SpreadType spreadType)
          {
             List<List<object>> table = new();
 
-            table.Add(createHeaderRow());
-            Constants.CurrenciesNames(_exchange).ToList().ForEach(currency => table.Add(createRow(currency)));
+            _cvbData.Currencies.ToList().ForEach(currency => table.Add(createRow(currency)));
             
             return table;
          }
 
-         private List<object> createHeaderRow()
-         {
-            string tableName = "RUB Курсы:";
-            var rowNames = new List<object>() { tableName };
-
-            foreach (var bank in Constants.BanksNames(_exchange))
-            {
-               rowNames.Add("Покупка" + "\n" + $"{Constants.EngToRusDict[$"{bank}"]}");
-               rowNames.Add("Продажа" + "\n" + $"{Constants.EngToRusDict[$"{bank}"]}");
-            }
-
-            return rowNames;
-         }
-
          private List<object> createRow(string currency)
          {
-            string rowName = currency;
-            var rates = new List<object>() { rowName };
+            var rates = new List<object>();
 
-            var exchangesData = ServicesContainer.Get<ExchangesData>();
-            foreach (var bank in Constants.BanksNames(_exchange))
+            var cvbsData = ServicesContainer.Get<CVBsData>();
+            foreach (var bank in _cvbData.Banks)
             {
-               rates.Add(Math.Round(exchangesData.GetOffer(_exchange, bank, currency, TradeType.Buy).Price, 2));
-               rates.Add(Math.Round(exchangesData.GetOffer(_exchange, bank, currency, TradeType.Sell).Price, 2));
+               try
+               {
+                  rates.Add(Math.Round(cvbsData.GetOffer(_cvbData.CVB, bank, currency, TradeType.Buy).Price, 2));
+               }
+               catch (Exception e)
+               {
+                  rates.Add($"ERROR\n{e.Message}");
+               }
+
+               try
+               {
+                  rates.Add(Math.Round(cvbsData.GetOffer(_cvbData.CVB, bank, currency, TradeType.Sell).Price, 2));
+
+                  if (bank == "RaiffeisenBankRussia" || bank == "Raiffaizen")
+                     rates.Add("");
+               }
+               catch (Exception e)
+               {
+                  rates.Add($"ERROR\n{e.Message}");
+               }
             }
 
             return rates;

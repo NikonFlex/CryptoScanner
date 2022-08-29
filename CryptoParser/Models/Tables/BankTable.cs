@@ -2,62 +2,65 @@
 {
    namespace Tables
    {
-      [Table("Bank")]
+      [SimpleTable("Bank")]
       public class BankTable : ITable
       {
-         private ExchangeType _exchange;
+         private CVBData _cvbData;
          private string _bank;
+         private int _balance;
+         private SpreadType _spreadType;
 
-         public BankTable(ExchangeType exchange, string bank)
+         public BankTable(CVBType cvb, string bank)
          {
-            _exchange = exchange;
+            _cvbData = Constants.GetCVBData(cvb);
             _bank = bank;
          }
 
-         public List<List<object>> CreateTable()
+         public List<List<object>> CreateTable(int balance, SpreadType spreadType)
          {
+            _balance = balance;
+            _spreadType = spreadType;
+
             List<List<object>> table = new();
 
-            table.Add(createHeaderRow());
-            Constants.CurrenciesNames(_exchange).ToList().ForEach(currency => table.Add(createRow(currency)));
+            _cvbData.Currencies.ToList().ForEach(currency => table.Add(createRow(currency)));
 
             return table;
          }
 
-         private List<object> createHeaderRow()
-         {
-            string tableName = Constants.EngToRusDict[_bank];
-            var rowNames = new List<object>() { tableName };
-            Constants.CurrenciesNames(_exchange).ToList().ForEach(currency => rowNames.Add($"Покупка\n{currency}"));
-
-            return rowNames;
-         }
-
          private List<object> createRow(string sellCurrency)
          {
-            string rowName = $"Продажа\n{sellCurrency}";
-            var lines = new List<object>() { rowName };
+            var lines = new List<object>();
 
-            Constants.CurrenciesNames(_exchange).ToList().ForEach(currency => lines.Add(calcLine(currency, sellCurrency)));
+            foreach (var currency in _cvbData.Currencies)
+            {
+               try
+               {
+                  lines.Add(Math.Round(calcLine(currency, sellCurrency), 2));
+               }
+               catch (Exception e)
+               {
+                  lines.Add($"ERROR\n{e.Message}");
+               }
+            }
 
             return lines;
          }
 
-         private string calcLine(string buyCurrency, string sellCurrency)
+         private float calcLine(string buyCurrency, string sellCurrency)
          {
-            var exchangesData = ServicesContainer.Get<ExchangesData>();
-            var sellOffer = exchangesData.GetOffer(_exchange, _bank, sellCurrency, TradeType.Sell);
-            var buyOffer = exchangesData.GetOffer(_exchange, _bank, buyCurrency, TradeType.Buy);
-            var sellCryptoMarketRate = exchangesData.GetMarketRate(_exchange, sellCurrency);
-            var buyCryptoMarketRate = exchangesData.GetMarketRate(_exchange, buyCurrency);
+            var cvbsData = ServicesContainer.Get<CVBsData>();
+            var sellOffer = cvbsData.GetOffer(_cvbData.CVB, _bank, sellCurrency, TradeType.Sell);
+            var buyOffer = cvbsData.GetOffer(_cvbData.CVB, _bank, buyCurrency, TradeType.Buy);
+            var sellCryptoMarketRate = cvbsData.GetMarketRate(_cvbData.CVB, sellCurrency);
+            var buyCryptoMarketRate = cvbsData.GetMarketRate(_cvbData.CVB, buyCurrency);
 
-            var spread = (Constants.Balance / sellOffer.Price *
-                   sellCryptoMarketRate.Price / buyCryptoMarketRate.Price
-                   * buyOffer.Price - Constants.Balance);
-
-            //return spread - (float)(spread * 0.1);
-            // debug
-            return $"{spread}={Constants.Balance}/{sellOffer.Price}*\n{sellCryptoMarketRate.Price}/{buyCryptoMarketRate.Price}*{buyOffer.Price}";
+            float spreadWithoutCommission = _balance / sellOffer.Price * sellCryptoMarketRate.Price / buyCryptoMarketRate.Price * buyOffer.Price - _balance;
+            
+            if (_spreadType == SpreadType.Rub)
+               return (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1);
+            else
+               return 100 * (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1) / _balance;
          }
       }
    }

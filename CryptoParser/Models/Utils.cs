@@ -2,14 +2,30 @@
 {
    public static class Utils
    {
-      public static ExchangeType GetExchangeTypeFrom(string exchange)
+      public static CVBType GetCVBTypeFrom(string cvb)
       {
-         if (exchange == "Binance")
-            return ExchangeType.Binance;
-         if (exchange == "OKX")
-            return ExchangeType.OKX;
-         else
-            throw new Exception($"Cannot convert {exchange} to exchange");
+         switch (cvb)
+         {
+            case "Binance":
+               return CVBType.Binance;
+            case "OKX":
+               return CVBType.OKX;
+            default:
+               throw new Exception($"Cannot convert {cvb} to cvb");
+         }
+      }
+
+      public static SpreadType GetSpreadTypeFrom(string type)
+      {
+         switch (type)
+         {
+            case "РУБ":
+               return SpreadType.Rub;
+            case "%":
+               return SpreadType.Percent;
+            default:
+               throw new Exception($"Cannot convert {type} to cvb");
+         }
       }
    }
 }

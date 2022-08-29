@@ -2,11 +2,11 @@
 {
    namespace Tables
    {
-      public class TableAttribute : Attribute
+      public class HardTableAttribute : Attribute
       {
          public readonly string Name;
 
-         public TableAttribute(string name)
+         public HardTableAttribute(string name)
          {
             Name = name;
          }

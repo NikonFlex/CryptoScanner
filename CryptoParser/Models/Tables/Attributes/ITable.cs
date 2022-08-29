@@ -4,7 +4,7 @@
    {
       public interface ITable
       {
-         public List<List<object>> CreateTable();
+         public List<List<object>> CreateTable(int balance, SpreadType spreadType);
       }
    }
 }

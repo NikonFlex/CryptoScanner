@@ -6,8 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-ServicesContainer.Register(new ExchangesData());
-ServicesContainer.Register(new GoogleSheetFiller());
+ServicesContainer.Register(new CVBsData());
+ServicesContainer.Register(new TablesToUpdateCollector());
 builder.Services.AddHostedService<TimedParserService>();
 log4net.Config.XmlConfigurator.Configure(configFile: new FileInfo("log4net.config"));
 

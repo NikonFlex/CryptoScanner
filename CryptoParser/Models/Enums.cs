@@ -1,15 +1,22 @@
 ﻿namespace CryptoParser.Models
 {
-   public enum ExchangeType
+   public enum CVBType
    {
       Binance,
       OKX,
+      Bybit,
    }
 
    public enum TradeType
    { 
       Buy,
       Sell,
+   }
+
+   public enum SpreadType
+   {
+      Rub,
+      Percent
    }
 
    static class EnumExtensions

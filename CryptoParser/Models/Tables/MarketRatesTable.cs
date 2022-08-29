@@ -2,43 +2,41 @@
 {
    namespace Tables
    {
-      [Table("MarketRates")]
+      [SimpleTable("MarketRates")]
       public class MarketRatesTable : ITable
       {
-         private ExchangeType _exchange;
+         private CVBData _cvbData;
 
-         public MarketRatesTable(ExchangeType exchange, string emptyParam)
+         public MarketRatesTable(CVBType cvb, string _)
          {
-            _exchange = exchange;
+            _cvbData = Constants.GetCVBData(cvb);
          }
 
-         public List<List<object>> CreateTable()
+         public List<List<object>> CreateTable(int balance, SpreadType spreadType)
          {
             List<List<object>> table = new();
 
-            table.Add(createHeaderRow());
             table.Add(createRow());
 
             return table;
          }
 
-         private List<object> createHeaderRow()
-         {
-            string tableName = "Курсы на\nМаркете";
-            var rowNames = new List<object>() { tableName };
-
-            Constants.CurrenciesNames(_exchange).ToList().ForEach(currency => rowNames.Add(currency));
-            
-            return rowNames;
-         }
-
          private List<object> createRow()
          {
-            string rowName = "Курсы";
-            var rates = new List<object>() { rowName };
+            var rates = new List<object>();
 
-            var exchangesData = ServicesContainer.Get<ExchangesData>();
-            Constants.CurrenciesNames(_exchange).ToList().ForEach(currency => rates.Add(exchangesData.GetMarketRate(_exchange, currency).Price));
+            var cvbsData = ServicesContainer.Get<CVBsData>();
+            foreach (var currency in _cvbData.Currencies)
+            {
+               try
+               {
+                  rates.Add(cvbsData.GetMarketRate(_cvbData.CVB, currency).Price);
+               }
+               catch (Exception e)
+               {
+                  rates.Add($"ERROR\n{e.Message}");
+               }
+            }
             
             return rates;
          }

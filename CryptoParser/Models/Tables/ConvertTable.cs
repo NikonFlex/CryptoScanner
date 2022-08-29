@@ -2,47 +2,41 @@
 {
    namespace Tables
    {
-      [Table("Convert")]
+      [SimpleTable("Convert")]
       public class ConvertTable : ITable
       {
-         private ExchangeType _exchange;
+         private CVBData _cvbData;
 
-         public ConvertTable(ExchangeType exchange, string emptyParam)
+         public ConvertTable(CVBType cvb, string _)
          {
-            _exchange = exchange;
+            _cvbData = Constants.GetCVBData(cvb);
          }
 
-         public List<List<object>> CreateTable()
+         public List<List<object>> CreateTable(int balance, SpreadType spreadType)
          {
             List<List<object>> table = new();
 
-            table.Add(createHeaderRow());
-            Constants.CurrenciesNames(_exchange).ToList().ForEach(currency => table.Add(createRow(currency)));
+            _cvbData.Currencies.ToList().ForEach(currency => table.Add(createRow(currency)));
 
             return table;
          }
 
-         private List<object> createHeaderRow()
-         {
-            string tableName = "Конвертация";
-            var rowNames = new List<object>() { tableName };
-
-            Constants.CurrenciesNames(_exchange).ToList().ForEach(currency => rowNames.Add(currency));
-           
-            return rowNames;
-         }
-
          private List<object> createRow(string toCurrency)
          {
-            string rowName = toCurrency;
-            var ratios = new List<object>() { rowName };
-
-            var exchangesData = ServicesContainer.Get<ExchangesData>();
-            foreach (var fromCurrency in Constants.CurrenciesNames(_exchange))
+            var ratios = new List<object>();
+            var cvbsData = ServicesContainer.Get<CVBsData>();
+            foreach (var fromCurrency in _cvbData.Currencies)
             {
-               var fromCurrencyMarketPrice = exchangesData.GetMarketRate(_exchange, fromCurrency).Price;
-               var toCurrencyMarketPrice = exchangesData.GetMarketRate(_exchange, toCurrency).Price;
-               ratios.Add(Math.Round(fromCurrencyMarketPrice / toCurrencyMarketPrice, 6));
+               try
+               {
+                  var fromCurrencyMarketPrice = cvbsData.GetMarketRate(_cvbData.CVB, fromCurrency).Price;
+                  var toCurrencyMarketPrice = cvbsData.GetMarketRate(_cvbData.CVB, toCurrency).Price;
+                  ratios.Add(Math.Round(fromCurrencyMarketPrice / toCurrencyMarketPrice, 6));
+               }
+               catch (Exception e)
+               {
+                  ratios.Add($"ERROR\n{e.Message}");
+               }
             }
 
             return ratios;
