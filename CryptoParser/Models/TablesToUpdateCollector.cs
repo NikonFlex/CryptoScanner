@@ -34,6 +34,7 @@ namespace CryptoParser.Models
 
       public void CollectTables()
       {
+         _spreadSheetsToUpdateIds.Clear();
          var range = $"Таблицы для обновления!B2:B1000";
          var request = _service.Spreadsheets.Values.Get(_spreadSheetId, range);
 
