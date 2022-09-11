@@ -5,7 +5,8 @@ namespace CryptoParser
 {
    public class TimedParserService : IHostedService, IDisposable
    {
-      private Timer? _timer = null;
+      private Timer? _timerForParcing = null;
+      private Timer? _timerForTablesCollector = null;
       private List<Models.Parsers.IParser> _parsers = new();
 
       public TimedParserService()
@@ -22,8 +23,11 @@ namespace CryptoParser
       {
          Logger.Info("Timed Hosted Service running.");
 
-         _timer = new Timer(ParseCVBs, null, TimeSpan.Zero,
-             TimeSpan.FromSeconds(60));
+         _timerForParcing = new Timer(Update, null, TimeSpan.Zero,
+             TimeSpan.FromSeconds(35));
+
+         _timerForTablesCollector = new Timer(UpdateTables, null, TimeSpan.Zero,
+             TimeSpan.FromSeconds(500));
 
          return Task.CompletedTask;
       }
@@ -32,15 +36,19 @@ namespace CryptoParser
       {
          Logger.Info("Timed Hosted Service is stopping.");
 
-         _timer?.Change(Timeout.Infinite, 0);
+         _timerForParcing?.Change(Timeout.Infinite, 0);
 
          return Task.CompletedTask;
       }
 
-      private void ParseCVBs(object? state)
+      private void Update(object? state)
       {
          clickYourself();
+         UpdateCVBsData();
+      }
 
+      private void UpdateCVBsData()
+      {
          Logger.Info("Start parse cvbs");
 
          ServicesContainer.Get<CVBsData>().ClearData();
@@ -50,26 +58,32 @@ namespace CryptoParser
          Task.WaitAll(tasks.ToArray());
 
          var collector = ServicesContainer.Get<TablesToUpdateCollector>();
-         collector.CollectTables();
-
-         //string[] spreadSheets = { "1aFMw6hTxMkl_30MuPVp3Nb8yc32bpeHPcAjrDeKpabc" };
-         foreach (var spreadSheet in collector.SpreadSheetsToUpdateIds)
+         foreach (var spreadSheet in collector.SpreadSheetsToUpdateIds.ToList())
          {
-            var filler = new GoogleSheetFiller(spreadSheet);
+            var filler = new GoogleSheetRequestsCreator(spreadSheet);
             filler.UpdateSpreadSheet();
          }
+
+         Logger.Info("cvbs parsed");
+      }
+
+      private void UpdateTables(object? state)
+      {
+         var collector = ServicesContainer.Get<TablesToUpdateCollector>();
+         collector.CollectTables();
       }
 
       private void clickYourself()
       {
          HttpClient client = new();
-         var requestUri = "http://nikontest-001-site1.dtempurl.com/";
+         var requestUri = "http://cryptoscannerp2p-001-site1.atempurl.com/";
          client.GetAsync(requestUri);
       }
 
       public void Dispose()
       {
-         _timer?.Dispose();
+         _timerForParcing?.Dispose();
+         _timerForTablesCollector?.Dispose();
       }
    }
 }

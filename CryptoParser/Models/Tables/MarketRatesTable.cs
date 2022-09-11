@@ -30,11 +30,12 @@
             {
                try
                {
-                  rates.Add(cvbsData.GetMarketRate(_cvbData.CVB, currency).Price);
+                  var marketRate = cvbsData.GetMarketRate(_cvbData.CVB, currency).Price;
+                  rates.Add(marketRate);
                }
                catch (Exception e)
                {
-                  rates.Add($"ERROR\n{e.Message}");
+                  rates.Add(float.NaN);
                }
             }
             

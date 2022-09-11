@@ -54,7 +54,7 @@ namespace CryptoParser.Models
       }
    }
 
-   public class GoogleSheetFiller
+   public class GoogleSheetRequestsCreator
    {
       private readonly string[] _scopes = { SheetsService.Scope.Spreadsheets };
       private readonly string _applicationName = "ExchangesInfo";
@@ -66,7 +66,7 @@ namespace CryptoParser.Models
       private SheetsService _service;
       private List<ValueRange> _requests = new();
 
-      public GoogleSheetFiller(string spreadSheetId)
+      public GoogleSheetRequestsCreator(string spreadSheetId)
       {
          _spreadSheetId = spreadSheetId;
 
@@ -117,20 +117,34 @@ namespace CryptoParser.Models
          updateTime();
          createRequests();
          updateBookValues();
+         Logger.Info("finish");
       }
 
       private void readSettings()
       {
-         var range = $"Описание и настройки!B2:C2";
+         Logger.Info($"start {_spreadSheetId} read setting");
+
+         var range = createRange(new Cell(Constants.SettingsPos), 1);
          var request = _service.Spreadsheets.Values.Get(_spreadSheetId, range);
 
-         var response = request.Execute();
-         var values = response.Values;
-         if (values != null && values.Count == 1)
+         try
          {
-            _balance = Int32.Parse(values[0][1].ToString());
-            _spreadType = Utils.GetSpreadTypeFrom((string)values[0][0]);
+            var response = request.Execute();
+            var values = response.Values;
+            if (values != null && values.Count == 1)
+            {
+               _balance = Int32.Parse(values[0][1].ToString());
+               _spreadType = Utils.GetSpreadTypeFrom((string)values[0][0]);
+            }
+            Logger.Info($"finish {_spreadSheetId} read setting");
          }
+         catch
+         {
+            _balance = 100000;
+            _spreadType = SpreadType.Percent;
+            Logger.Info($"{_spreadSheetId} read setting failed");
+         }
+         
       }
 
       private void createRequests()
@@ -156,7 +170,9 @@ namespace CryptoParser.Models
             var instance = constructor?.Invoke(new object[] { Utils.GetCVBTypeFrom(cvb), tableParam });
             var table = instance as Tables.ITable;
 
+            Logger.Info($"start {_spreadSheetId} fill {tableName}");
             fillTable(table?.CreateTable(_balance, _spreadType), new Cell(Constants.SimpleTablesRanges[tableName]));
+            Logger.Info($"finish {_spreadSheetId} fill {tableName}");
          }
       }
 
@@ -179,11 +195,13 @@ namespace CryptoParser.Models
             var instance = constructor?.Invoke(new object[] { Utils.GetCVBTypeFrom(buyCvb), Utils.GetCVBTypeFrom(sellCvb), tableParam1, tableParam2 });
             var table = instance as Tables.ITable;
 
+            Logger.Info($"start {_spreadSheetId} fill {tableName}");
             fillTable(table?.CreateTable(_balance, _spreadType), new Cell(Constants.HardTablesRanges[tableName]));
+            Logger.Info($"finish {_spreadSheetId} fill {tableName}");
          }
       }
 
-      private void updateTime() => _requests.Add(createRequest(new List<object>() { DateTime.UtcNow.ToString() }, createRange(new Cell(Constants.TimePos), 1)));
+      private void updateTime() => _requests.Add(createRequest(new List<object>() { $"{TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time")).ToString("H:mm:ss")} по МСК" }, createRange(new Cell(Constants.TimePos), 1)));
 
       private void fillTable(List<List<object>> table, Cell topleft)
       {
@@ -208,8 +226,17 @@ namespace CryptoParser.Models
          requestBody.ValueInputOption = "USER_ENTERED";
          requestBody.Data = _requests;
 
+         Logger.Info($"{_spreadSheetId} start update");
          SpreadsheetsResource.ValuesResource.BatchUpdateRequest request = _service.Spreadsheets.Values.BatchUpdate(requestBody, _spreadSheetId);
-         _ = request.Execute();
+         try
+         {
+            _ = request.Execute();
+            Logger.Info($"{_spreadSheetId} finish update");
+         }
+         catch
+         {
+            Logger.Info($"{_spreadSheetId} update failed");
+         }
       }
 
       private ValueRange createRequest(List<object> values, string range) => new ValueRange() { Values = new List<IList<object>> { values }, Range = range };

@@ -2,15 +2,15 @@
 {
    namespace Tables
    {
-      [SimpleTable("Currency")]
-      public class CurrencyTable : ITable
+      [SimpleTable("CurrencyWithTaker")]
+      public class CurrencyTableWithTaker : ITable
       {
          private CVBData _cvbData;
          private string _currency;
          private int _balance;
          private SpreadType _spreadType;
 
-         public CurrencyTable(CVBType cvb, string currency)
+         public CurrencyTableWithTaker(CVBType cvb, string currency)
          {
             _cvbData = Constants.GetCVBData(cvb);
             _currency = currency;
@@ -24,10 +24,10 @@
             List<List<object>> table = new();
 
             _cvbData.Banks.ToList().ForEach(bank => table.Add(createRow(bank)));
-            
+
             return table;
          }
-         
+
          private List<object> createRow(string sellBank)
          {
             var spreads = new List<object>();
@@ -38,7 +38,7 @@
                try
                {
                   var buyOfferPrice = cvbsData.GetOffer(_cvbData.CVB, buyBank, _currency, TradeType.Buy).Price;
-                  var sellOfferPrice = cvbsData.GetOffer(_cvbData.CVB, sellBank, _currency, TradeType.Sell).Price;
+                  var sellOfferPrice = cvbsData.GetOffer(_cvbData.CVB, sellBank, _currency, TradeType.Buy).Price;
 
                   var spreadWithoutCommission = _balance / sellOfferPrice * buyOfferPrice - _balance;
 
@@ -49,7 +49,7 @@
                }
                catch (Exception e)
                {
-                  spreads.Add($"ERROR\n{e.Message}");
+                  spreads.Add(float.NaN);
                }
             }
 

@@ -30,7 +30,8 @@
             {
                try
                {
-                  rates.Add(Math.Round(cvbsData.GetOffer(_cvbData.CVB, bank, currency, TradeType.Buy).Price, 2));
+                  var offer = cvbsData.GetOffer(_cvbData.CVB, bank, currency, TradeType.Buy).Price;
+                  rates.Add(Math.Round(offer, 2));
                }
                catch (Exception e)
                {
@@ -39,10 +40,8 @@
 
                try
                {
-                  rates.Add(Math.Round(cvbsData.GetOffer(_cvbData.CVB, bank, currency, TradeType.Sell).Price, 2));
-
-                  if (bank == "RaiffeisenBankRussia" || bank == "Raiffaizen")
-                     rates.Add("");
+                  var offer = cvbsData.GetOffer(_cvbData.CVB, bank, currency, TradeType.Sell).Price;
+                  rates.Add(Math.Round(offer, 2));
                }
                catch (Exception e)
                {

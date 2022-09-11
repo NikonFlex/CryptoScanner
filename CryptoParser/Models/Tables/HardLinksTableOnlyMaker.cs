@@ -2,8 +2,8 @@
 {
    namespace Tables
    {
-      [HardTable("HardLinks")]
-      public class HardLinksTable : ITable
+      [HardTable("HardLinksOnlyMaker")]
+      public class HardLinksTableOnlyMaker : ITable
       {
          private CVBData _sellCvbData;
          private CVBData _buyCvbData;
@@ -12,7 +12,7 @@
          private int _balance;
          private SpreadType _spreadType;
 
-         public HardLinksTable(CVBType sellCvb, CVBType buyCvb, string buyBank, string sellCurrency)
+         public HardLinksTableOnlyMaker(CVBType sellCvb, CVBType buyCvb, string buyBank, string sellCurrency)
          {
             _sellCvbData = Constants.GetCVBData(sellCvb);
             _buyCvbData = Constants.GetCVBData(buyCvb);
@@ -38,17 +38,8 @@
 
             var currencies = _buyCvbData.Currencies;
             foreach (var currency in currencies)
-            {
-               try
-               {
-                  lines.Add(Math.Round(calcLine(currency, sellBank), 2));
-               }
-               catch (Exception e)
-               {
-                  lines.Add($"ERROR\n{e.Message}");
-               }
-            }
-
+               lines.Add(Math.Round(calcLine(currency, sellBank), 2));
+            
             return lines;
          }
 
@@ -60,12 +51,19 @@
             var sellCryptoMarketRate = cvbsData.GetMarketRate(_sellCvbData.CVB, _sellCurrency);
             var buyCryptoMarketRate = cvbsData.GetMarketRate(_buyCvbData.CVB, buyCurrency);
 
-            float spreadWithoutCommission = (_balance / sellOffer.Price * sellCryptoMarketRate.Price / buyCryptoMarketRate.Price * buyOffer.Price - _balance);
-            
-            if (_spreadType == SpreadType.Rub)
-               return (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1);
-            else
-               return 100 * (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1) / _balance;
+            try
+            {
+               float spreadWithoutCommission = (_balance / sellOffer.Price * sellCryptoMarketRate.Price / buyCryptoMarketRate.Price * buyOffer.Price - _balance);
+
+               if (_spreadType == SpreadType.Rub)
+                  return (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1);
+               else
+                  return 100 * (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1) / _balance;
+            }
+            catch
+            {
+               return float.NaN;
+            }
          }
       }
    }

@@ -2,15 +2,15 @@
 {
    namespace Tables
    {
-      [SimpleTable("Bank")]
-      public class BankTable : ITable
+      [SimpleTable("BankOnlyMaker")]
+      public class BankTableOnlyMaker : ITable
       {
          private CVBData _cvbData;
          private string _bank;
          private int _balance;
          private SpreadType _spreadType;
 
-         public BankTable(CVBType cvb, string bank)
+         public BankTableOnlyMaker(CVBType cvb, string bank)
          {
             _cvbData = Constants.GetCVBData(cvb);
             _bank = bank;
@@ -34,14 +34,7 @@
 
             foreach (var currency in _cvbData.Currencies)
             {
-               try
-               {
-                  lines.Add(Math.Round(calcLine(currency, sellCurrency), 2));
-               }
-               catch (Exception e)
-               {
-                  lines.Add($"ERROR\n{e.Message}");
-               }
+               lines.Add(Math.Round(calcLine(currency, sellCurrency), 2));
             }
 
             return lines;
@@ -55,12 +48,19 @@
             var sellCryptoMarketRate = cvbsData.GetMarketRate(_cvbData.CVB, sellCurrency);
             var buyCryptoMarketRate = cvbsData.GetMarketRate(_cvbData.CVB, buyCurrency);
 
-            float spreadWithoutCommission = _balance / sellOffer.Price * sellCryptoMarketRate.Price / buyCryptoMarketRate.Price * buyOffer.Price - _balance;
+            try
+            {
+               float spreadWithoutCommission = _balance / sellOffer.Price * sellCryptoMarketRate.Price / buyCryptoMarketRate.Price * buyOffer.Price - _balance;
+               if (_spreadType == SpreadType.Rub)
+                  return (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1);
+               else
+                  return 100 * (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1) / _balance;
+            }
+            catch
+            {
+               return float.NaN;
+            }
             
-            if (_spreadType == SpreadType.Rub)
-               return (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1);
-            else
-               return 100 * (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1) / _balance;
          }
       }
    }

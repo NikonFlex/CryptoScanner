@@ -12,7 +12,7 @@ namespace CryptoParser.Models
       private List<string> _spreadSheetsToUpdateIds = new();
       private SheetsService _service;
 
-      public IReadOnlyList<string> SpreadSheetsToUpdateIds => _spreadSheetsToUpdateIds;
+      public List<string> SpreadSheetsToUpdateIds => _spreadSheetsToUpdateIds;
 
       public TablesToUpdateCollector()
       {
