@@ -4,7 +4,25 @@
    {
       Binance,
       OKX,
-      Bybit,
+      Huobi,
+   }
+
+   public enum Bank
+   {
+      Tinkoff,
+      Sberbank,
+      Raiffaisen,
+      QIWI,
+      YandexMoney,
+   }
+
+   public enum Currency
+   {
+      USDT,
+      BTC,
+      BUSD,
+      BNB,
+      ETH,
    }
 
    public enum TradeType

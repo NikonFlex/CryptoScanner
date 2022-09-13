@@ -21,7 +21,7 @@
             return table;
          }
 
-         private List<object> createRow(string toCurrency)
+         private List<object> createRow(Currency toCurrency)
          {
             var ratios = new List<object>();
             var cvbsData = ServicesContainer.Get<CVBsData>();

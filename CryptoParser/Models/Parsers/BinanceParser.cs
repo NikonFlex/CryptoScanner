@@ -32,9 +32,9 @@ namespace CryptoParser.Models
 
             List<Task<Offer>> tasks = new();
 
-            foreach (string bank in _cvbData.Banks)
+            foreach (Bank bank in _cvbData.Banks)
             {
-               foreach (string currency in _cvbData.Currencies)
+               foreach (Currency currency in _cvbData.Currencies)
                {
                   tasks.Add(parseOfferAsync(bank, currency, TradeType.Buy));
                   tasks.Add(parseOfferAsync(bank, currency, TradeType.Sell));
@@ -48,7 +48,7 @@ namespace CryptoParser.Models
             Logger.Info($"Parse Binance offers process finished");
          }
 
-         private async Task<Offer> parseOfferAsync(string bank, string currency, TradeType tradeType)
+         private async Task<Offer> parseOfferAsync(Bank bank, Currency currency, TradeType tradeType)
          {
 
             try
@@ -56,11 +56,11 @@ namespace CryptoParser.Models
                string data = JsonConvert.SerializeObject(
                   new
                   {
-                     asset = currency,
+                     asset = Utils.GetCurrencyNameFrom(currency, _cvbData.CVB),
                      fiat = "RUB",
                      merchantCheck = false,
                      page = 1,
-                     payTypes = new[] { bank },
+                     payTypes = new[] { Utils.GetBankNameFrom(bank, _cvbData.CVB) },
                      rows = 1,
                      tradeType = tradeType.TypeToString()
                   });
@@ -73,17 +73,17 @@ namespace CryptoParser.Models
 
                Logger.Info($"Binance Offer: {bank}, {currency}, {tradeType.TypeToString()} parsed successfully");
 
-               return new Offer(CVBType.Binance, bank, currency, tradeType, (float)minPrice, "OK");
+               return new Offer(_cvbData.CVB, bank, currency, tradeType, (float)minPrice, "OK");
             }
             catch (HttpRequestException e)
             {
                Logger.Info($"Binance parse exeption: {e.Message}");
-               return new Offer(CVBType.Binance, bank, currency, tradeType, 0, "BadRequest");
+               return new Offer(_cvbData.CVB, bank, currency, tradeType, 0, "BadRequest");
             }
             catch (Exception e)
             {
                Logger.Info($"Binance read answer exeption: {e.Message}");
-               return new Offer(CVBType.Binance, bank, currency, tradeType, 0, e.Message);
+               return new Offer(_cvbData.CVB, bank, currency, tradeType, 0, e.Message);
             }
          }
 
@@ -102,14 +102,14 @@ namespace CryptoParser.Models
             Logger.Info($"Parse Binance marketPrices process finished");
          }
 
-         private async Task<MarketRate> parseMarketPriceAsync(string currency)
+         private async Task<MarketRate> parseMarketPriceAsync(Currency currency)
          {
-            if (currency == "USDT")
-               return new MarketRate(CVBType.Binance, currency, 1, "OK");
+            if (currency == Currency.USDT)
+               return new MarketRate(_cvbData.CVB, currency, 1, "OK");
 
             try
             {
-               var requestUri = $"https://api.binance.com/api/v3/ticker/price?symbol={currency}USDT";
+               var requestUri = $"https://api.binance.com/api/v3/ticker/price?symbol={Utils.GetCurrencyNameFrom(currency, _cvbData.CVB)}USDT";
                var response = await _client.GetAsync(requestUri);
                var responseString = await response.Content.ReadAsStringAsync();
                var responseJson = JObject.Parse(responseString);
@@ -117,17 +117,17 @@ namespace CryptoParser.Models
 
                Logger.Info($"Binance MarketPrice: {currency} parsed successfully");
 
-               return new MarketRate(CVBType.Binance, currency, price, "OK");
+               return new MarketRate(_cvbData.CVB, currency, price, "OK");
             }
             catch (HttpRequestException e)
             {
                Logger.Info($"Binance parse exeption: {e.Message}");
-               return new MarketRate(CVBType.Binance, currency, 0, "BadRequest");
+               return new MarketRate(_cvbData.CVB, currency, 0, "BadRequest");
             }
             catch (Exception e)
             {
                Logger.Info($"Binance read answer exeption: {e.Message}");
-               return new MarketRate(CVBType.Binance, currency, 0, e.Message);
+               return new MarketRate(_cvbData.CVB, currency, 0, e.Message);
             }
          }
       }

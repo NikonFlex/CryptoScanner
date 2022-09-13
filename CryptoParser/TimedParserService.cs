@@ -27,7 +27,7 @@ namespace CryptoParser
              TimeSpan.FromSeconds(35));
 
          _timerForTablesCollector = new Timer(UpdateTables, null, TimeSpan.Zero,
-             TimeSpan.FromSeconds(500));
+             TimeSpan.FromSeconds(60));
 
          return Task.CompletedTask;
       }
@@ -57,6 +57,7 @@ namespace CryptoParser
          _parsers.ForEach(parser => tasks.Add(parser.UpdateDataAsync()));
          Task.WaitAll(tasks.ToArray());
 
+         var a = ServicesContainer.Get<CVBsData>();
          var collector = ServicesContainer.Get<TablesToUpdateCollector>();
          foreach (var spreadSheet in collector.SpreadSheetsToUpdateIds.ToList())
          {

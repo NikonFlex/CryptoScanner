@@ -6,14 +6,14 @@
       public class CurrencyTableWithTaker : ITable
       {
          private CVBData _cvbData;
-         private string _currency;
+         private Currency _currency;
          private int _balance;
          private SpreadType _spreadType;
 
          public CurrencyTableWithTaker(CVBType cvb, string currency)
          {
             _cvbData = Constants.GetCVBData(cvb);
-            _currency = currency;
+            _currency = Utils.GetCurrencyTypeFrom(currency);
          }
 
          public List<List<object>> CreateTable(int balance, SpreadType spreadType)
@@ -28,7 +28,7 @@
             return table;
          }
 
-         private List<object> createRow(string sellBank)
+         private List<object> createRow(Bank sellBank)
          {
             var spreads = new List<object>();
 
@@ -43,9 +43,9 @@
                   var spreadWithoutCommission = _balance / sellOfferPrice * buyOfferPrice - _balance;
 
                   if (_spreadType == SpreadType.Rub)
-                     spreads.Add(Math.Round((float)(spreadWithoutCommission - spreadWithoutCommission * 0.1), 2));
+                     spreads.Add(Math.Round((float)(spreadWithoutCommission - spreadWithoutCommission * 0.01), 2));
                   else
-                     spreads.Add(Math.Round(100 * (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1) / _balance, 2));
+                     spreads.Add(Math.Round(100 * (float)(spreadWithoutCommission - spreadWithoutCommission * 0.01) / _balance, 2));
                }
                catch (Exception e)
                {

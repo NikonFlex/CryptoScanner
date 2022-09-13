@@ -19,12 +19,12 @@
       }
       public void AddMarketPrice(MarketRate marketPrice) => _marketRates.Add(marketPrice);
       
-      public Offer? GetOffer(CVBType cvb, string bank, string currency, TradeType tradeType) => _offers.FirstOrDefault(offer => offer.CVB == cvb &&
+      public Offer? GetOffer(CVBType cvb, Bank bank, Currency currency, TradeType tradeType) => _offers.FirstOrDefault(offer => offer.CVB == cvb &&
                                                                                                                                 offer.Bank == bank &&
                                                                                                                                 offer.Currency == currency &&
                                                                                                                                 offer.TradeType == tradeType);
 
-      public MarketRate? GetMarketRate(CVBType cvb, string currency) => _marketRates.FirstOrDefault(price => price.CVB == cvb &&
-                                                                                                             price.Currency == currency);
+      public MarketRate? GetMarketRate(CVBType cvb, Currency currency) => _marketRates.FirstOrDefault(price => price.CVB == cvb &&
+                                                                                                               price.Currency == currency);
    }
 }

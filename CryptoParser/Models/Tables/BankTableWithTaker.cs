@@ -6,14 +6,14 @@
       public class BankTableWithMaker : ITable
       {
          private CVBData _cvbData;
-         private string _bank;
+         private Bank _bank;
          private int _balance;
          private SpreadType _spreadType;
 
          public BankTableWithMaker(CVBType cvb, string bank)
          {
             _cvbData = Constants.GetCVBData(cvb);
-            _bank = bank;
+            _bank = Utils.GetBankTypeFrom(bank);
          }
 
          public List<List<object>> CreateTable(int balance, SpreadType spreadType)
@@ -28,7 +28,7 @@
             return table;
          }
 
-         private List<object> createRow(string sellCurrency)
+         private List<object> createRow(Currency sellCurrency)
          {
             var lines = new List<object>();
 
@@ -38,7 +38,7 @@
             return lines;
          }
 
-         private float calcLine(string buyCurrency, string sellCurrency)
+         private float calcLine(Currency buyCurrency, Currency sellCurrency)
          {
             var cvbsData = ServicesContainer.Get<CVBsData>();
             var sellOffer = cvbsData.GetOffer(_cvbData.CVB, _bank, sellCurrency, TradeType.Buy);
@@ -51,9 +51,9 @@
                float spreadWithoutCommission = _balance / sellOffer.Price * sellCryptoMarketRate.Price / buyCryptoMarketRate.Price * buyOffer.Price - _balance;
 
                if (_spreadType == SpreadType.Rub)
-                  return (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1);
+                  return (float)(spreadWithoutCommission - spreadWithoutCommission * 0.01);
                else
-                  return (100 * (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1) / _balance);
+                  return (100 * (float)(spreadWithoutCommission - spreadWithoutCommission * 0.01) / _balance);
             }
             catch
             {

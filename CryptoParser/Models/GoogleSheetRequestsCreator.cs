@@ -124,16 +124,16 @@ namespace CryptoParser.Models
       {
          Logger.Info($"start {_spreadSheetId} read setting");
 
-         var range = createRange(new Cell(Constants.SettingsPos), 1);
-         var request = _service.Spreadsheets.Values.Get(_spreadSheetId, range);
-
          try
          {
+            var range = createRange(new Cell(Constants.SettingsPos), 1);
+            var request = _service.Spreadsheets.Values.Get(_spreadSheetId, range);
             var response = request.Execute();
             var values = response.Values;
+
             if (values != null && values.Count == 1)
             {
-               _balance = Int32.Parse(values[0][1].ToString());
+               _balance = int.Parse(values[0][1].ToString());
                _spreadType = Utils.GetSpreadTypeFrom((string)values[0][0]);
             }
             Logger.Info($"finish {_spreadSheetId} read setting");

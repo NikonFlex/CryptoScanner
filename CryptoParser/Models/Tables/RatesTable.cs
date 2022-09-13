@@ -21,7 +21,7 @@
             return table;
          }
 
-         private List<object> createRow(string currency)
+         private List<object> createRow(Currency currency)
          {
             var rates = new List<object>();
 

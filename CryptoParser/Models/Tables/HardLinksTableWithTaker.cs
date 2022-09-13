@@ -7,8 +7,8 @@
       {
          private CVBData _sellCvbData;
          private CVBData _buyCvbData;
-         private string _buyBank;
-         private string _sellCurrency;
+         private Bank _buyBank;
+         private Currency _sellCurrency;
          private int _balance;
          private SpreadType _spreadType;
 
@@ -16,8 +16,8 @@
          {
             _sellCvbData = Constants.GetCVBData(sellCvb);
             _buyCvbData = Constants.GetCVBData(buyCvb);
-            _buyBank = buyBank;
-            _sellCurrency = sellCurrency;
+            _buyBank = Utils.GetBankTypeFrom(buyBank);
+            _sellCurrency = Utils.GetCurrencyTypeFrom(sellCurrency);
          }
 
          public List<List<object>> CreateTable(int balance, SpreadType spreadType)
@@ -32,7 +32,7 @@
             return table;
          }
 
-         private List<object> createRow(string sellBank)
+         private List<object> createRow(Bank sellBank)
          {
             var lines = new List<object>();
 
@@ -52,7 +52,7 @@
             return lines;
          }
 
-         private float calcLine(string buyCurrency, string sellBank)
+         private float calcLine(Currency buyCurrency, Bank sellBank)
          {
             var cvbsData = ServicesContainer.Get<CVBsData>();
             var sellOffer = cvbsData.GetOffer(_sellCvbData.CVB, sellBank, _sellCurrency, TradeType.Buy);
@@ -65,9 +65,9 @@
                float spreadWithoutCommission = (_balance / sellOffer.Price * sellCryptoMarketRate.Price / buyCryptoMarketRate.Price * buyOffer.Price - _balance);
 
                if (_spreadType == SpreadType.Rub)
-                  return (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1);
+                  return (float)(spreadWithoutCommission - spreadWithoutCommission * 0.01);
                else
-                  return (100 * (float)(spreadWithoutCommission - spreadWithoutCommission * 0.1) / _balance);
+                  return (100 * (float)(spreadWithoutCommission - spreadWithoutCommission * 0.01) / _balance);
             }
             catch
             {
