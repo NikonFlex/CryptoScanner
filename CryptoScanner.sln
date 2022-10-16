@@ -5,7 +5,7 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoParser", "CryptoParser\CryptoParser.csproj", "{F4332DD5-FEE1-428F-BFA4-A919BD9F7F57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScannerClicker", "ScannerClicker\ScannerClicker.csproj", "{4B8B16E3-D6E1-4B87-853C-EF5827133F04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoScannerBot", "ScannerClicker\CryptoScannerBot.csproj", "{4B8B16E3-D6E1-4B87-853C-EF5827133F04}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

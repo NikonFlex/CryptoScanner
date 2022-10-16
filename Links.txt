@@ -1,0 +1,20 @@
+1) Пример, откуда брать копию
+https://docs.google.com/spreadsheets/d/1kJbaSSlRGRpx0Fqs_IHuL8DCZ8bBCJu_Chb-uehcdng/edit#gid=865660477
+
+2) Таблица для обновления
+https://docs.google.com/spreadsheets/d/11lvjsbu-7B9Tzwin-DmMXPItDxviI7W1L5Dj9_BgKvQ/edit#gid=0
+
+3) Api с парсером
+http://cryptoscannerp2p-001-site1.atempurl.com/
+
+4) Api с монитором и ботом
+http://scannerbot-001-site1.ctempurl.com/
+
+5) Репозиторий с кодом 
+https://bitbucket.org/nikonsp/cryptoparser/src/master/
+
+6) Рабочая почта
+crypto.scanner.p2p@gmail.com TopUiop
+
+7) Бот в телеге
+t.me/NikonCryptoBot
