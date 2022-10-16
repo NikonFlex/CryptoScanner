@@ -16,4 +16,14 @@
     <PackageReference Include="Unity" Version="5.11.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="CVBsData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
 </Project>

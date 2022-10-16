@@ -1,4 +1,6 @@
-﻿namespace CryptoParser.Models
+﻿using CryptoParser.Models;
+
+namespace CryptoParser
 {
    namespace Tables
    {
@@ -32,7 +34,7 @@
          {
             var spreads = new List<object>();
 
-            var cvbsData = ServicesContainer.Get<CVBsData>();
+            var cvbsData = ServicesContainer.Get<CVBsDataManager>().GetData();
             foreach (var buyBank in _cvbData.Banks)
             {
                try

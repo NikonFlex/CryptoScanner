@@ -1,14 +1,13 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using CryptoParser.Models;
 
-namespace CryptoParser.Models
+namespace CryptoParser
 {
-   namespace Parsers
+   namespace Parsing
    {
       [Parser]
       public class HuobiParser : IParser
       {
-         private readonly HttpClient _client = new HttpClient();
+         private readonly HttpClient _client = new();
          private CVBData _cvbData;
 
          public HuobiParser()
@@ -16,16 +15,7 @@ namespace CryptoParser.Models
             _cvbData = Constants.GetCVBData(CVBType.Huobi);
          }
 
-         public async Task UpdateDataAsync()
-         {
-            Logger.Info("Start parse Huobi prices");
-
-            await Task.WhenAll(parseOffersAsync(), parseMarketPricesAsync());
-
-            Logger.Info("Huobi prices parsed");
-         }
-
-         private async Task parseOffersAsync()
+         public async Task<List<Offer>> ParseOffersAsync()
          {
             Logger.Info($"Parse Huobi offers process started");
 
@@ -42,9 +32,13 @@ namespace CryptoParser.Models
             Logger.Info($"Parse Huobi offers process passed");
 
             await Task.WhenAll(tasks.ToArray());
-            tasks.ForEach(task => ServicesContainer.Get<CVBsData>().AddOffer(task.Result));
+
+            List<Offer> offers = new();
+            tasks.ForEach(task => offers.Add(task.Result));
 
             Logger.Info($"Parse Huobi offers process finished");
+
+            return offers;
          }
 
          private async Task<Offer> parseOfferAsync(Bank bank, Currency currency, TradeType tradeType)
@@ -54,9 +48,15 @@ namespace CryptoParser.Models
                var requestUri = $"https://otc-api.trygofast.com/v1/data/trade-market?coinId={Utils.GetCurrencyNameFrom(currency, _cvbData.CVB)}&currency=11&tradeType={tradeType.TypeToString()}&payMethod={Utils.GetBankNameFrom(bank, _cvbData.CVB)}&blockType=general";
                var response = await _client.GetAsync(requestUri);
                var responseString = await response.Content.ReadAsStringAsync();
-               var responseJson = JObject.Parse(responseString);
-               float minPrice;
-               minPrice = (float)responseJson["data"][0]["price"];
+               var responseJson = Newtonsoft.Json.Linq.JObject.Parse(responseString);
+
+               var adverts = responseJson["data"];
+               var advertsCountToMedian = adverts.Count() > 5 ? 5 : adverts.Count();
+               List<float> prices = new();
+               for (int i = 0; i < advertsCountToMedian; i++)
+                  prices.Add((float)adverts[i]["price"]);
+               prices.Sort();
+               float minPrice = prices[(int)prices.Count() / 2];
                
                return new Offer(_cvbData.CVB, bank, currency, tradeType == TradeType.Buy ? TradeType.Sell : TradeType.Buy, minPrice, "OK");
 
@@ -74,7 +74,7 @@ namespace CryptoParser.Models
             }
          }
 
-         private async Task parseMarketPricesAsync()
+         public async Task<List<MarketRate>> ParseMarketRatesAsync()
          {
             Logger.Info($"Parse Huobi marketPrices process started");
 
@@ -84,9 +84,13 @@ namespace CryptoParser.Models
             Logger.Info($"Parse Huobi marketPrices process passed");
 
             await Task.WhenAll(tasks.ToArray());
-            tasks.ForEach(rate => ServicesContainer.Get<CVBsData>().AddMarketPrice(rate.Result));
+
+            List<MarketRate> marketRates = new();
+            tasks.ForEach(rate => marketRates.Add(rate.Result));
 
             Logger.Info($"Parse Huobi marketPrices process finished");
+
+            return marketRates;
          }
 
          private async Task<MarketRate> parseMarketPriceAsync(Currency currency)
@@ -99,7 +103,7 @@ namespace CryptoParser.Models
                var requestUri = "https://api.huobi.pro/market/tickers";
                var response = await _client.GetAsync(requestUri);
                var responseString = await response.Content.ReadAsStringAsync();
-               var responseJson = JObject.Parse(responseString);
+               var responseJson = Newtonsoft.Json.Linq.JObject.Parse(responseString);
                float price = 0;
                foreach (var symbol in responseJson["data"])
                {

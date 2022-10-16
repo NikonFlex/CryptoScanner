@@ -1,4 +1,4 @@
-﻿namespace CryptoParser.Models
+﻿namespace CryptoParser
 {
    namespace Tables
    {

@@ -1,0 +1,953 @@
+{
+  "_offers": [
+    {
+      "CVB": 0,
+      "Bank": 0,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 0,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 0,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 0,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 0,
+      "Currency": 2,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 0,
+      "Currency": 2,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 0,
+      "Currency": 3,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 0,
+      "Currency": 3,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 0,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 0,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 1,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 1,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 1,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 1,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 1,
+      "Currency": 2,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 1,
+      "Currency": 2,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 1,
+      "Currency": 3,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 1,
+      "Currency": 3,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 1,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 1,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 2,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 2,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 2,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 2,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 2,
+      "Currency": 2,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 2,
+      "Currency": 2,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 2,
+      "Currency": 3,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 2,
+      "Currency": 3,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 2,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 2,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 3,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 3,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 3,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 3,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 3,
+      "Currency": 2,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 3,
+      "Currency": 2,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 3,
+      "Currency": 3,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 3,
+      "Currency": 3,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 3,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 3,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 4,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 4,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 4,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 4,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 4,
+      "Currency": 2,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 4,
+      "Currency": 2,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 4,
+      "Currency": 3,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 4,
+      "Currency": 3,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 4,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Bank": 4,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 0,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 0,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 0,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 0,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 0,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 0,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 1,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 1,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 1,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 1,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 1,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 1,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 2,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 2,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 2,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 2,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 2,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 2,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 3,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 3,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 3,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 3,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 3,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 3,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 4,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 4,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 4,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 4,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 4,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Bank": 4,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 0,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 0,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 0,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 0,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 0,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 0,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 1,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 1,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 1,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 1,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 1,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 1,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 2,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 2,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 2,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 2,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 2,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 2,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 3,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 3,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 3,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 3,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 3,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 3,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 4,
+      "Currency": 0,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 4,
+      "Currency": 0,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 4,
+      "Currency": 1,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 4,
+      "Currency": 1,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 4,
+      "Currency": 4,
+      "TradeType": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Bank": 4,
+      "Currency": 4,
+      "TradeType": 0,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    }
+  ],
+  "_marketRates": [
+    {
+      "CVB": 0,
+      "Currency": 0,
+      "Price": 1.0,
+      "Message": "OK"
+    },
+    {
+      "CVB": 0,
+      "Currency": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Currency": 2,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Currency": 3,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 0,
+      "Currency": 4,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Currency": 0,
+      "Price": 1.0,
+      "Message": "OK"
+    },
+    {
+      "CVB": 2,
+      "Currency": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 2,
+      "Currency": 4,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Currency": 0,
+      "Price": 1.0,
+      "Message": "OK"
+    },
+    {
+      "CVB": 1,
+      "Currency": 1,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    },
+    {
+      "CVB": 1,
+      "Currency": 4,
+      "Price": 0.0,
+      "Message": "BadRequest"
+    }
+  ],
+  "ParseTime": "2022-10-01T15:23:03.266592Z"
+}

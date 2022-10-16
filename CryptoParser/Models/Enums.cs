@@ -1,51 +1,54 @@
-﻿namespace CryptoParser.Models
+﻿namespace CryptoParser
 {
-   public enum CVBType
+   namespace Models
    {
-      Binance,
-      OKX,
-      Huobi,
-   }
-
-   public enum Bank
-   {
-      Tinkoff,
-      Sberbank,
-      Raiffaisen,
-      QIWI,
-      YandexMoney,
-   }
-
-   public enum Currency
-   {
-      USDT,
-      BTC,
-      BUSD,
-      BNB,
-      ETH,
-   }
-
-   public enum TradeType
-   { 
-      Buy,
-      Sell,
-   }
-
-   public enum SpreadType
-   {
-      Rub,
-      Percent
-   }
-
-   static class EnumExtensions
-   {
-      public static string TypeToString(this TradeType type)
+      public enum CVBType
       {
-         switch (type)
+         Binance,
+         OKX,
+         Huobi,
+      }
+
+      public enum Bank
+      {
+         Tinkoff,
+         Sberbank,
+         Raiffaisen,
+         QIWI,
+         YandexMoney,
+      }
+
+      public enum Currency
+      {
+         USDT,
+         BTC,
+         BUSD,
+         BNB,
+         ETH,
+      }
+
+      public enum TradeType
+      {
+         Buy,
+         Sell,
+      }
+
+      public enum SpreadType
+      {
+         Rub,
+         Percent
+      }
+
+      static class EnumExtensions
+      {
+         public static string TypeToString(this TradeType type)
          {
-            case TradeType.Buy: return "BUY";
-            case TradeType.Sell: return "SELL";
-            default: throw new ArgumentOutOfRangeException("type");
+            switch (type)
+            {
+               case TradeType.Buy:  return "BUY";
+               case TradeType.Sell: return "SELL";
+               default:             throw new ArgumentOutOfRangeException("type");
+            }
          }
       }
    }

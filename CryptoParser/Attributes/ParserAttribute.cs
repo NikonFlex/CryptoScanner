@@ -1,6 +1,6 @@
-﻿namespace CryptoParser.Models
+﻿namespace CryptoParser
 {
-   namespace Parsers
+   namespace Parsing
    {
       public class ParserAttribute : Attribute
       {

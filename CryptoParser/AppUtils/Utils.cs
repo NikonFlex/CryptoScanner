@@ -1,4 +1,7 @@
-﻿namespace CryptoParser.Models
+﻿using CryptoParser.Models;
+using Newtonsoft.Json;
+
+namespace CryptoParser
 {
    public static class Utils
    {
@@ -17,9 +20,9 @@
       {
          switch (type)
          {
-            case "РУБ": return SpreadType.Rub;
-            case "%":   return SpreadType.Percent;
-            default:    throw new Exception($"Cannot convert {type} to cvb");
+            case "rub":     return SpreadType.Rub;
+            case "percent": return SpreadType.Percent;
+            default:        throw new Exception($"Cannot convert {type} to spreadtype");
          }
       }
 
@@ -60,7 +63,7 @@
                case Bank.Raiffaisen:  return "RaiffeisenBank";
                case Bank.QIWI:        return "QIWI";
                case Bank.YandexMoney: return "YandexMoneyNew";
-               default:               return "No such bank";
+               default: return "No such bank";
             }
          }
          if (cvb == CVBType.OKX)
@@ -126,6 +129,49 @@
                case Currency.ETH:  return "3";
                default:            return "No such currency";
             }
+         }
+      }
+
+      public static TradeType GetTradeTypeFrom(string tradeType)
+      {
+         switch (tradeType)
+         {
+            case "buy":  return TradeType.Buy;
+            case "sell": return TradeType.Sell;
+            default:     throw new Exception($"Cannot convert {tradeType} to spreadtype");
+         }
+      }
+
+      public static CVBsData ReadCVBsDataFromFile()
+      {
+         Logger.Info($"start read from {Constants.CVBsDataFile}");
+         try
+         {
+            string jsonString = File.ReadAllText(Constants.CVBsDataFile);
+            var data = JsonConvert.DeserializeObject<CVBsData>(jsonString)!;
+            if (data != null)
+               return data;
+            else
+               return new CVBsData();
+         }
+         catch
+         {
+            Logger.Info($"error with reading from {Constants.CVBsDataFile}");
+            return new CVBsData();
+         }
+      }
+
+      public static void SaveCVBsDataToFile(CVBsData data)
+      {
+         Logger.Info($"start save to {Constants.CVBsDataFile}");
+         try
+         {
+            string jsonString = JsonConvert.SerializeObject(data, Formatting.Indented);
+            File.WriteAllText(Constants.CVBsDataFile, jsonString);
+         }
+         catch
+         {
+            Logger.Info($"error with saving to {Constants.CVBsDataFile}");
          }
       }
    }

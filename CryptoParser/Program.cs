@@ -1,14 +1,10 @@
-using CryptoParser.Models;
-using CryptoParser;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-ServicesContainer.Register(new CVBsData());
-ServicesContainer.Register(new TablesToUpdateCollector());
-builder.Services.AddHostedService<TimedParserService>();
+CryptoParser.ServicesContainer.Register(new CryptoParser.Parsing.ParsersManager());
+CryptoParser.ServicesContainer.Register(new CryptoParser.Models.CVBsDataManager());
 log4net.Config.XmlConfigurator.Configure(configFile: new FileInfo("log4net.config"));
 
 var app = builder.Build();

@@ -1,4 +1,6 @@
-﻿namespace CryptoParser.Models
+﻿using CryptoParser.Models;
+
+namespace CryptoParser
 {
    namespace Tables
    {
@@ -42,7 +44,7 @@
 
          private float calcLine(Currency buyCurrency, Currency sellCurrency)
          {
-            var cvbsData = ServicesContainer.Get<CVBsData>();
+            var cvbsData = ServicesContainer.Get<CVBsDataManager>().GetData();
             var sellOffer = cvbsData.GetOffer(_cvbData.CVB, _bank, sellCurrency, TradeType.Sell);
             var buyOffer = cvbsData.GetOffer(_cvbData.CVB, _bank, buyCurrency, TradeType.Buy);
             var sellCryptoMarketRate = cvbsData.GetMarketRate(_cvbData.CVB, sellCurrency);
