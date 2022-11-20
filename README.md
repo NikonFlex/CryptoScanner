@@ -1,1 +1,1 @@
-# CryptoScanner
+This project is about parsing a few crypto exchanges and filling information in google tables. During development, I have learned a lot of new techologies. I have learned how to make a restful api and how to use googlesheets api. For asking an update I also decided to learn basis of google apps script. CryptoScanner was my first expierence of making a startup, but it wasn't very successful. I and my friend have sold some tables, but not as much as we expected.
